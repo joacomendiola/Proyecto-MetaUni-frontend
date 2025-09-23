@@ -1,0 +1,62 @@
+.dashboard-container {
+  max-width: 900px;
+  margin: 40px auto;
+  padding: 20px;
+  text-align: center;
+}
+
+.dashboard-container h2 {
+  font-size: 1.8rem;
+  font-weight: 600;
+  margin-bottom: 30px;
+  color: inherit; 
+}
+
+/* Grid de cards */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 20px;
+}
+
+/* Card de carrera */
+.career-card {
+  background: white;
+  padding: 24px;
+  border-radius: 16px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+  text-align: left;
+  transition: transform 0.2s;
+}
+
+.career-card:hover {
+  transform: translateY(-4px);
+}
+
+.career-card h3 {
+  font-size: 1.2rem;
+  margin-bottom: 12px;
+  color: #4f46e5;
+}
+
+/* Barra de progreso */
+.progress-bar {
+  background: #e5e7eb;
+  border-radius: 8px;
+  height: 12px;
+  margin-bottom: 10px;
+  overflow: hidden;
+}
+
+.progress {
+  background: linear-gradient(to right, #6366f1, #4f46e5);
+  height: 100%;
+  border-radius: 8px;
+  transition: width 0.3s ease;
+}
+
+.career-card p {
+  font-size: 14px;
+  color: #374151;
+  font-weight: 500;
+}

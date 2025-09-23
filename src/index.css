@@ -1,13 +1,505 @@
-body {
+/* ================== RESET GLOBAL ================== */
+* {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  padding: 0;
+  box-sizing: border-box;  
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: #f9fafb;
+  color: #111827;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+  padding-top: 70px;   /* evita que el navbar tape contenido */
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Transiciones globales */
+body, .card, .navbar, .btn, .input-group input, .career-card {
+  transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* ================================================================= */
+/* ================== LOGIN & REGISTER (CARD) ================== */
+.card {
+  background: white;
+  padding: 40px;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 400px;
+  margin-top: 60px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+}
+
+.card h2 {
+  text-align: center;
+  margin-bottom: 28px;
+  font-size: 1.6rem;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+/* ================== INPUTS ================== */
+.input-group {
+  position: relative;
+  margin-bottom: 18px;
+}
+
+.input-group input {
+  width: 100%;
+  height: 44px;              
+  padding: 0 44px;           
+  border-radius: 10px;
+  border: 1px solid #d1d5db;
+  font-size: 15px;
+  outline: none;
+  background: #f9fafb;
+  line-height: 1.4;          
+}
+
+.input-group input:focus {
+  border-color: #4f46e5;
+  background: white;
+  box-shadow: 0 0 0 3px rgba(79,70,229,0.2);
+}
+
+.input-group input::placeholder {
+  color: #9ca3af;
+  font-size: 14px;
+}
+
+/* Quitar iconos nativos */
+input::-ms-reveal,
+input::-ms-clear { display: none !important; }
+
+/* Iconos en inputs */
+.input-icon {
+  position: absolute;
+  top: 50%;
+  left: 14px;
+  transform: translateY(-50%);
+  color: #9ca3af;
+  font-size: 16px;
+}
+
+.toggle-password {
+  position: absolute;
+  top: 50%;
+  right: 14px;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: #6b7280;
+  font-size: 18px;
+}
+
+/* ================== BOTONES GENERALES ================== */
+.btn,
+a.btn {
+  display: inline-block;
+  width: 100%;
+  padding: 14px;
+  background: linear-gradient(to right, #6366f1, #4f46e5);
+  color: white !important;
+  border: none;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 15px;
+  cursor: pointer;
+  text-decoration: none;
+  text-align: center;
+  transition: transform 0.15s ease, box-shadow 0.2s;
+}
+
+.btn:hover,
+a.btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(79,70,229,0.3);
+}
+
+/* ================================================================= */
+/* ================== NAVBAR ================== */
+.navbar {
+  width: 100%;
+  background: #4f46e5;
+  padding: 15px 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: white;
+  font-weight: 600;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+}
+
+.logo { 
+  font-size: 20px; 
+}
+
+/*  Contenedor de enlaces e icono */
+.nav-links {
+  display: flex;
+  align-items: center;   /* centra verticalmente */
+  gap: 24px;
+}
+
+/*  Links de navegación */
+.nav-links a {
+  color: white;
+  text-decoration: none;
+  font-weight: 500;
+  display: flex;         /* se comportan igual que el botón */
+  align-items: center;
+  height: 100%;
+  transition: opacity 0.2s;
+}
+
+.nav-links a:hover { 
+  opacity: 0.8; 
+}
+
+/*  Botón de toggle (sol/luna) */
+.theme-toggle {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 20px;       /* mismo tamaño que el texto */
+  color: inherit;
+  display: flex;
+  align-items: center;
+  height: 100%;
+  transition: opacity 0.2s;
+}
+
+.theme-toggle:hover {
+  opacity: 0.8;
+}
+
+/* ================================================================= */
+/* ================== DASHBOARD ================== */
+.dashboard {
+  width: 100%;
+  max-width: 1100px; 
+  margin: 40px auto;
+  padding: 20px;
+}
+
+.dashboard h2 {
+  text-align: center;
+  margin-bottom: 30px;
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: inherit;
+}
+
+/* Contenedor de tarjetas de carrera */
+.careers-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+  gap: 24px;
+}
+
+/* Tarjeta individual de carrera */
+.career-card {
+  background: white;
+  border-radius: 12px;
+  padding: 30px;
+  min-height: 160px;
+  min-width: 500px;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+}
+
+.career-card h3 {
+  margin-bottom: 12px;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: inherit;
+}
+
+/* Barra de progreso */
+.progress-bar {
+  width: 100%;
+  height: 10px;
+  background: #e5e7eb;
+  border-radius: 8px;
+  margin-bottom: 8px;
+  overflow: hidden;
+}
+
+.progress {
+  height: 100%;
+  background: linear-gradient(to right, #6366f1, #4f46e5);
+  border-radius: 8px;
+}
+
+.career-card p {
+  font-size: 14px;
+  color: #4b5563;
+  margin-bottom: 14px;
+}
+
+.career-card .btn {
+  font-size: 14px;
+  padding: 10px 16px;
+  width: auto;
+}
+
+.dark-mode .career-card p { color: #d1d5db; }
+
+/* ================================================================= */
+/* ================== PALETA DE COLORES ================== */
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+}
+
+/* Icono del pincel 🎨 */
+.paint-icon {
+  font-size: 18px;
+  cursor: pointer;
+  transition: color 0.2s;
+  color: #d1d5db; /* gris claro en modo claro */
+}
+
+.paint-icon:hover { color: #4f46e5; }
+
+.dark-mode .paint-icon { color: #3b82f6; }
+.dark-mode .paint-icon:hover { color: #a78bfa; }
+
+/* Popup con colores */
+.palette-popup {
+  position: absolute;
+  top: 30px;
+  right: 0;
+  display: flex;
+  gap: 6px;
+  background: white;
+  padding: 6px 8px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  z-index: 10;
+}
+
+.dark-mode .palette-popup {
+  background: #1f2937;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.6);
+}
+
+/* Botones de color */
+.color-circle {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  outline: none;
+  transition: transform 0.2s;
+}
+
+.color-circle:hover { transform: scale(1.15); }
+
+/* ================================================================= */
+/* ================== DARK MODE GENERAL ================== */
+.dark-mode { background-color: #0f172a; color: #f9fafb; }
+.dark-mode .navbar { background: #4f46e5; }
+
+.dark-mode .card,
+.dark-mode .career-card,
+.dark-mode .materia-card {
+  background: #1e1b4b;
+  color: #f9fafb;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+}
+
+.dark-mode h1,
+.dark-mode h2,
+.dark-mode h3,
+.dark-mode p,
+.dark-mode a,
+.dark-mode span,
+.dark-mode label,
+.dark-mode input,
+.dark-mode button {
+  color: #f9fafb !important;
+}
+
+.dark-mode .input-group input {
+  background: #1e293b;
+  border: 1px solid #475569;
+  color: #f9fafb;
+}
+
+.dark-mode .progress-bar { background: #334155; }
+
+.dark-mode .btn,
+.dark-mode a.btn {
+  background: linear-gradient(to right, #7c3aed, #4f46e5);
+  color: white !important;
+}
+
+/* ================================================================= */
+/* ================== CARRERA DETAIL ================== */
+.career-detail {
+  width: 100%;
+  max-width: 800px;
+  margin: 40px auto;
+  padding: 20px;
+  text-align: center;
+}
+
+.materias-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.materia-card {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  text-align: left;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.materia-card h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: #4f46e5;
+}
+
+.materia-card p { font-size: 14px; color: #374151; }
+.materia-card span { font-weight: 600; color: #111827; }
+
+.promedio {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-top: 10px;
+  color: inherit;
+}
+
+/* Dark mode de materias */
+.dark-mode .materia-card { background: #1f2937; color: #f9fafb; }
+.dark-mode .materia-card h3 { color: #a78bfa; }
+.dark-mode .materia-card p,
+.dark-mode .materia-card span { color: #f9fafb; }
+
+.career-title {
+  text-align: center;
+  margin-bottom: 30px;
+  font-size: 2rem;
+  font-weight: 700;
+  color: inherit;
+  display: block;
+}
+
+
+
+/* Spinner */
+.spinner-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;  /* se alinea arriba */
+  height: 100vh;                /* sigue ocupando toda la pantalla */
+  padding-top: 25vh;            /* lo baja desde arriba (ajustable) */
+  gap: 10px;
+  text-align: center;
+}
+
+.spinner {
+  width: 50px;
+  height: 50px;
+  border: 5px solid #ddd;
+  border-top: 5px solid #6366f1;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+.spinner-container p {
+  font-size: 14px;
+  font-weight: 500;
+  color: inherit;
+}
+
+.dark-mode .spinner {
+  border: 4px solid #374151;
+  border-top: 4px solid #a78bfa;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ================== TOASTIFY ================== */
+.Toastify__toast {
+  border-radius: 12px;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  padding: 10px 14px;
+}
+
+.Toastify__toast--success {
+  background: #22c55e; /* verde */
+  color: white;
+}
+
+.Toastify__toast--error {
+  background: #ef4444; /* rojo */
+  color: white;
+}
+
+.Toastify__toast--info {
+  background: #3b82f6; /* azul */
+  color: white;
+}
+
+.Toastify__toast--warning {
+  background: #facc15; /* amarillo */
+  color: #111827;
+}
+
+/* ================== PERFIL DE USUARIO EN NAVBAR ================== */
+.user-profile {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: white;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.user-profile span {
+  margin-right: 6px;
+}
+
+.logout-btn {
+  background: transparent;
+  border: none;
+  color: #f87171; /* rojo suave */
+  cursor: pointer;
+  font-size: 14px;
+  padding: 2px 6px;
+  border-radius: 6px;
+  transition: background 0.2s, color 0.2s;
+}
+
+.logout-btn:hover {
+  background: rgba(248, 113, 113, 0.15); /* fondo rojo muy suave */
+  color: #ef4444; /* rojo más fuerte */
 }
