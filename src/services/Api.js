@@ -1,5 +1,5 @@
 
-const API_URL = "https://proyecto-metauni.onrender.com";
+const API_URL = "https://proyecto-metauni.onrender.com/api";
 
 // ================== AUTH ==================
 export async function login(email, password) {
