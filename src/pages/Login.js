@@ -2,19 +2,20 @@
 import React, { useState } from "react";
 import { FaUserAlt, FaLock } from "react-icons/fa";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
-import { toast } from "react-toastify"; // ✅ notificaciones
+import { toast } from "react-toastify";
+import { login as loginApi } from "../services/Api"; // 🔗 usamos tu api.js
+import { useAuth } from "../context/AuthContext";
 import "../index.css";
 
 // ================== LOGIN ==================
 export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
-
-  // Estado de inputs
   const [correo, setCorreo] = useState("");
   const [password, setPassword] = useState("");
+  const { login } = useAuth();
 
   // Manejo del login
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
 
     if (!correo.includes("@")) {
@@ -24,8 +25,23 @@ export default function Login() {
       return toast.error("⚠️ La contraseña debe tener al menos 6 caracteres");
     }
 
-    // 🔗 Aquí luego va la llamada al backend
-    toast.success("✅ Inicio de sesión exitoso!");
+    try {
+      const data = await loginApi(correo, password);
+
+      if (data.token) {
+        // 🔹 Guardar en contexto
+        login({
+          email: correo,
+          rol: data.rol || "ROLE_USER", // si el backend devuelve el rol
+          token: data.token,
+        });
+        toast.success("✅ Inicio de sesión exitoso!");
+      } else {
+        throw new Error("Credenciales inválidas");
+      }
+    } catch (err) {
+      toast.error("❌ " + err.message);
+    }
   };
 
   return (

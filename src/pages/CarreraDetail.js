@@ -1,55 +1,45 @@
 // ================== IMPORTS ==================
 import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 import LoadingSpinner from "../components/LoadingSpinner";
+import { getCarrera } from "../services/api"; // 🔗 usamos tu api.js
+import { useAuth } from "../context/AuthContext";
 import "../index.css";
 
 // ================== DETALLE DE CARRERA ==================
 export default function CarreraDetail() {
-  // Estado de materias y carga
+  const { id } = useParams();
+  const { user } = useAuth();
+
   const [materias, setMaterias] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Datos mock (fallback)
-  const mockMaterias = [
-    { id: 1, nombre: "Matemática I", notaFinal: 8 },
-    { id: 2, nombre: "Programación I", notaFinal: 7 },
-    { id: 3, nombre: "Bases de Datos", notaFinal: 9 }
-  ];
-
   useEffect(() => {
-    fetch("http://localhost:8080/materias")
-      .then((res) => {
-        if (!res.ok) throw new Error("Error en la API");
-        return res.json();
-      })
-      .then((data) => {
-        if (Array.isArray(data) && data.length > 0) {
-          setMaterias(data);
-        } else {
-          setMaterias(mockMaterias); // si la API devuelve vacío
-        }
-      })
-      .catch((err) => {
-        console.error("⚠️ Error al obtener materias:", err.message);
-        setMaterias(mockMaterias); // fallback si falla
-      })
-      .finally(() => setLoading(false));
-  }, []);
+    if (user?.token) {
+      getCarrera(id, user.token)
+        .then((data) => {
+          if (Array.isArray(data)) {
+            setMaterias(data);
+          }
+        })
+        .catch((err) => console.error("⚠️ Error al obtener materias:", err))
+        .finally(() => setLoading(false));
+    }
+  }, [id, user]);
 
-  // Spinner mientras carga
   if (loading) {
     return <LoadingSpinner text="Cargando tus materias..." />;
   }
 
-  // Cálculo del promedio
   const promedio =
-    materias.reduce((acc, m) => acc + m.notaFinal, 0) / materias.length;
+    materias.length > 0
+      ? materias.reduce((acc, m) => acc + m.notaFinal, 0) / materias.length
+      : 0;
 
-  // Colores según nota
   const getNotaColor = (nota) => {
-    if (nota >= 9) return "#22c55e"; // verde
-    if (nota >= 7) return "#facc15"; // amarillo
-    return "#ef4444"; // rojo
+    if (nota >= 9) return "#22c55e";
+    if (nota >= 7) return "#facc15";
+    return "#ef4444";
   };
 
   return (
@@ -70,7 +60,9 @@ export default function CarreraDetail() {
         ))}
       </div>
 
-      <p className="promedio">Promedio general: {promedio.toFixed(2)}</p>
+      <p className="promedio">
+        Promedio general: {materias.length > 0 ? promedio.toFixed(2) : "N/A"}
+      </p>
     </div>
   );
 }

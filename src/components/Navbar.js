@@ -7,7 +7,7 @@ import "../index.css";
 
 // ================== NAVBAR ==================
 export default function Navbar({ darkMode, setDarkMode }) {
-  const { user, loginUser, loginAdmin, logout } = useAuth();
+  const { user, logout } = useAuth();
 
   return (
     <nav className="navbar">
@@ -17,14 +17,6 @@ export default function Navbar({ darkMode, setDarkMode }) {
           <>
             <Link to="/iniciar-sesion">Iniciar Sesión</Link>
             <Link to="/registrarse">Registrarse</Link>
-
-            {/* 🔹 Botones de prueba de roles */}
-            <button className="btn" style={{ width: "auto" }} onClick={loginUser}>
-              Login USER
-            </button>
-            <button className="btn" style={{ width: "auto" }} onClick={loginAdmin}>
-              Login ADMIN
-            </button>
           </>
         ) : (
           <>

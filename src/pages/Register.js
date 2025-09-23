@@ -2,20 +2,19 @@
 import React, { useState } from "react";
 import { FaUserAlt, FaLock, FaEnvelope } from "react-icons/fa";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
-import { toast } from "react-toastify"; // ✅ para notificaciones
+import { toast } from "react-toastify";
+import { register as registerApi } from "../services/Api"; // 🔗 usamos tu api.js
 import "../index.css";
 
 // ================== REGISTRO ==================
 export default function Register() {
   const [showPassword, setShowPassword] = useState(false);
-
-  // Estado de los inputs
   const [nombre, setNombre] = useState("");
   const [correo, setCorreo] = useState("");
   const [password, setPassword] = useState("");
 
   // Manejo del registro con validaciones
-  const handleRegister = (e) => {
+  const handleRegister = async (e) => {
     e.preventDefault();
 
     if (nombre.trim().length < 3) {
@@ -28,8 +27,21 @@ export default function Register() {
       return toast.error("⚠️ La contraseña debe tener al menos 6 caracteres");
     }
 
-    toast.success("✅ Registro exitoso!");
-    // 🔗 Aquí luego iría la llamada al backend
+    try {
+      const data = await registerApi({
+        nombre,
+        email: correo,
+        password,
+      });
+
+      if (data.id || data.email) {
+        toast.success("✅ Registro exitoso! Ahora inicia sesión.");
+      } else {
+        throw new Error("Error al registrar usuario");
+      }
+    } catch (err) {
+      toast.error("❌ " + err.message);
+    }
   };
 
   return (

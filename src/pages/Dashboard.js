@@ -2,11 +2,14 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { FaPaintBrush } from "react-icons/fa"; // 🎨 Icono pincel
+import { getCarreras } from "../services/api"; // 🔗 usamos tu api.js
+import { useAuth } from "../context/AuthContext";
 import "../index.css";
 
 // ================== COMPONENTE PRINCIPAL ==================
 export default function Dashboard() {
-  // 🎨 Paleta de colores extendida
+  const { user } = useAuth();
+
   const colorMap = {
     violeta: "#6366f1",
     verde: "#22c55e",
@@ -22,45 +25,33 @@ export default function Dashboard() {
     gris: "#6b7280",
     marrón: "#92400e",
     aqua: "#0ea5e9",
-    magenta: "#d946ef"
+    magenta: "#d946ef",
   };
 
-  // ================== ESTADO DE CARRERAS ==================
-  const [carreras, setCarreras] = useState([
-    { id: 1, nombre: "Ingeniería de Software", totalMaterias: 30, aprobadas: 15, color: "#6366f1" },
-    { id: 2, nombre: "Base de Datos", totalMaterias: 10, aprobadas: 7, color: "#6366f1" }
-  ]);
+  const [carreras, setCarreras] = useState([]);
+  const [showPalette, setShowPalette] = useState(null);
 
-  const [showPalette, setShowPalette] = useState(null); // id de la carrera activa
-
-  // ================== LOCALSTORAGE: CARGAR ==================
+  // ================== CARGAR CARRERAS DEL BACKEND ==================
   useEffect(() => {
-    const savedColors = JSON.parse(localStorage.getItem("carreraColors"));
-    if (savedColors) {
-      setCarreras((prev) =>
-        prev.map((c) => ({ ...c, color: savedColors[c.id] || c.color }))
-      );
+    if (user?.token) {
+      getCarreras(user.token)
+        .then((data) => {
+          if (Array.isArray(data)) {
+            setCarreras(data);
+          }
+        })
+        .catch((err) => console.error("⚠️ Error cargando carreras:", err));
     }
-  }, []);
+  }, [user]);
 
-  // ================== LOCALSTORAGE: GUARDAR ==================
-  useEffect(() => {
-    const colorsToSave = carreras.reduce((acc, c) => {
-      acc[c.id] = c.color;
-      return acc;
-    }, {});
-    localStorage.setItem("carreraColors", JSON.stringify(colorsToSave));
-  }, [carreras]);
-
-  // ================== CAMBIAR COLOR ==================
+  // ================== CAMBIAR COLOR LOCAL ==================
   const handleColorChange = (id, color) => {
-    setCarreras(carreras.map(c =>
+    setCarreras(carreras.map(c => 
       c.id === id ? { ...c, color } : c
     ));
-    setShowPalette(null); // cerrar paleta después de elegir
+    setShowPalette(null);
   };
 
-  // ================== RENDER ==================
   return (
     <div className="dashboard">
       <h2>Mis Carreras</h2>
@@ -70,40 +61,37 @@ export default function Dashboard() {
 
           return (
             <div key={c.id} className="career-card">
-              {/* ====== Header con título y pincel 🎨 ====== */}
               <div className="card-header">
                 <h3>{c.nombre}</h3>
                 <FaPaintBrush
                   className="paint-icon"
-                  onClick={() => setShowPalette(showPalette === c.id ? null : c.id)}
+                  onClick={() =>
+                    setShowPalette(showPalette === c.id ? null : c.id)
+                  }
                 />
               </div>
 
-              {/* ====== Barra de progreso con color personalizado ====== */}
               <div className="progress-bar">
                 <div
                   className="progress"
                   style={{
                     width: `${porcentaje}%`,
-                    background: c.color
+                    background: c.color || "#6366f1",
                   }}
                 ></div>
               </div>
 
-              {/* ====== Texto de materias y porcentaje ====== */}
               <p>
                 {c.aprobadas}/{c.totalMaterias} materias aprobadas
               </p>
               <p>{porcentaje.toFixed(0)}% completado</p>
 
-              {/* ====== Botón para ver materias ====== */}
               <div className="card-actions">
                 <Link to={`/carrera/${c.id}`} className="btn">
                   Ver materias
                 </Link>
               </div>
 
-              {/* ====== Paleta de colores que aparece al presionar el pincel ====== */}
               {showPalette === c.id && (
                 <div className="palette-popup">
                   {Object.entries(colorMap).map(([nombre, hex]) => (
@@ -112,9 +100,9 @@ export default function Dashboard() {
                       className="color-circle"
                       style={{
                         background: hex,
-                        border: c.color === hex ? "3px solid white" : "none"
+                        border: c.color === hex ? "3px solid white" : "none",
                       }}
-                      title={nombre} // tooltip con nombre del color
+                      title={nombre}
                       onClick={() => handleColorChange(c.id, hex)}
                     />
                   ))}
