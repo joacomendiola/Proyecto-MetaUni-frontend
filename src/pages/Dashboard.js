@@ -34,8 +34,10 @@ export default function Dashboard() {
   // ================== CARGAR CARRERAS DEL BACKEND ==================
   useEffect(() => {
     if (user?.token) {
+      console.log("👉 Pidiendo carreras al backend con token:", user.token);
       getCarreras(user.token)
         .then((data) => {
+          console.log("✅ Respuesta del backend (carreras):", data);
           if (Array.isArray(data)) {
             setCarreras(data);
           }
@@ -115,3 +117,4 @@ export default function Dashboard() {
     </div>
   );
 }
+

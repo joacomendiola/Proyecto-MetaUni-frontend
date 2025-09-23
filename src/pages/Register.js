@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { FaUserAlt, FaLock, FaEnvelope } from "react-icons/fa";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 import { toast } from "react-toastify";
-import { register as registerApi } from "../services/Api"; // 🔗 usamos tu api.js
+import { register as registerApi } from "../services/Api"; 
 import "../index.css";
 
 // ================== REGISTRO ==================
@@ -16,6 +16,7 @@ export default function Register() {
   // Manejo del registro con validaciones
   const handleRegister = async (e) => {
     e.preventDefault();
+    console.log("👉 Enviando datos de registro:", { nombre, correo, password });
 
     if (nombre.trim().length < 3) {
       return toast.error("⚠️ El nombre debe tener al menos 3 caracteres");
@@ -34,12 +35,15 @@ export default function Register() {
         password,
       });
 
+      console.log("✅ Respuesta del backend REGISTER:", data);
+
       if (data.id || data.email) {
         toast.success("✅ Registro exitoso! Ahora inicia sesión.");
       } else {
         throw new Error("Error al registrar usuario");
       }
     } catch (err) {
+      console.error("❌ Error en REGISTER:", err);
       toast.error("❌ " + err.message);
     }
   };
@@ -47,9 +51,7 @@ export default function Register() {
   return (
     <div className="card">
       <h2>Crear Cuenta</h2>
-
       <form onSubmit={handleRegister}>
-        {/* Nombre */}
         <div className="input-group">
           <FaUserAlt className="input-icon" />
           <input
@@ -59,8 +61,6 @@ export default function Register() {
             onChange={(e) => setNombre(e.target.value)}
           />
         </div>
-
-        {/* Correo */}
         <div className="input-group">
           <FaEnvelope className="input-icon" />
           <input
@@ -70,8 +70,6 @@ export default function Register() {
             onChange={(e) => setCorreo(e.target.value)}
           />
         </div>
-
-        {/* Contraseña */}
         <div className="input-group">
           <FaLock className="input-icon" />
           <input
@@ -87,7 +85,6 @@ export default function Register() {
             {showPassword ? <AiFillEyeInvisible /> : <AiFillEye />}
           </span>
         </div>
-
         <button type="submit" className="btn">Registrarse</button>
       </form>
     </div>

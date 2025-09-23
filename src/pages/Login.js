@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { FaUserAlt, FaLock } from "react-icons/fa";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 import { toast } from "react-toastify";
-import { login as loginApi } from "../services/Api"; // 🔗 usamos tu api.js
+import { login as loginApi } from "../services/Api"; 
 import { useAuth } from "../context/AuthContext";
 import "../index.css";
 
@@ -14,9 +14,9 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const { login } = useAuth();
 
-  // Manejo del login
   const handleLogin = async (e) => {
     e.preventDefault();
+    console.log("👉 Enviando datos LOGIN:", { correo, password });
 
     if (!correo.includes("@")) {
       return toast.error("⚠️ Correo inválido");
@@ -27,12 +27,12 @@ export default function Login() {
 
     try {
       const data = await loginApi(correo, password);
+      console.log("✅ Respuesta del backend LOGIN:", data);
 
       if (data.token) {
-        // 🔹 Guardar en contexto
         login({
           email: correo,
-          rol: data.rol || "ROLE_USER", // si el backend devuelve el rol
+          rol: data.rol || "ROLE_USER",
           token: data.token,
         });
         toast.success("✅ Inicio de sesión exitoso!");
@@ -40,6 +40,7 @@ export default function Login() {
         throw new Error("Credenciales inválidas");
       }
     } catch (err) {
+      console.error("❌ Error en LOGIN:", err);
       toast.error("❌ " + err.message);
     }
   };
@@ -47,9 +48,7 @@ export default function Login() {
   return (
     <div className="card">
       <h2>Iniciar Sesión</h2>
-
       <form onSubmit={handleLogin}>
-        {/* Correo */}
         <div className="input-group">
           <FaUserAlt className="input-icon" />
           <input
@@ -59,8 +58,6 @@ export default function Login() {
             onChange={(e) => setCorreo(e.target.value)}
           />
         </div>
-
-        {/* Contraseña */}
         <div className="input-group">
           <FaLock className="input-icon" />
           <input
@@ -76,7 +73,6 @@ export default function Login() {
             {showPassword ? <AiFillEyeInvisible /> : <AiFillEye />}
           </span>
         </div>
-
         <button type="submit" className="btn">Entrar</button>
       </form>
     </div>
