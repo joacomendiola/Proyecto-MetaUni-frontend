@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import LoadingSpinner from "../components/LoadingSpinner";
-import { getCarrera } from "../services/Api"; // 
+import { getCarrera } from "../services/Api"; 
 import { useAuth } from "../context/AuthContext";
 import "../index.css";
 

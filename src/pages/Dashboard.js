@@ -1,8 +1,8 @@
 // ================== IMPORTS ==================
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { FaPaintBrush } from "react-icons/fa"; // 🎨 Icono pincel
-import { getCarreras } from "../services/api"; // 🔗 usamos tu api.js
+import { FaPaintBrush } from "react-icons/fa"; 
+import { getCarreras } from "../services/Api"; 
 import { useAuth } from "../context/AuthContext";
 import "../index.css";
 
