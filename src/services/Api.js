@@ -3,17 +3,28 @@ const API_URL = "https://proyecto-metauni.onrender.com/api";
 
 // ================== AUTH ==================
 export async function login(email, password) {
-  const res = await fetch(`${API_URL}/auth/login`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ email, password }),
-    credentials: "include",  
-  });
+  try {
+    const res = await fetch(`${API_URL}/auth/login`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, password }),
+      credentials: "include",
+    });
 
-  if (!res.ok) {
-    throw new Error("Error en login");
+    if (res.status === 401) {
+      throw new Error("Credenciales inválidas");
+    }
+
+    if (!res.ok) {
+      throw new Error("Error inesperado en login");
+    }
+
+    return await res.json(); // { token, rol, email }
+  } catch (error) {
+    // Podés loguear el error si querés
+    console.error("Login error:", error);
+    throw error; // lo re-lanzás para que el componente lo capture
   }
-  return res.json(); // { token, rol, email }
 }
 
 export async function register(user) {
