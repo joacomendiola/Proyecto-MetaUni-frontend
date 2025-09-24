@@ -10,13 +10,13 @@ import "../index.css";
 // ================== LOGIN ==================
 export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
-  const [correo, setCorreo] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const { login } = useAuth();
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    console.log("👉 Enviando datos LOGIN:", { correo, password });
+    console.log("👉 Enviando datos LOGIN:", { email, password });
 
     if (!correo.includes("@")) {
       return toast.error("⚠️ Correo inválido");
@@ -26,12 +26,12 @@ export default function Login() {
     }
 
     try {
-      const data = await loginApi(correo, password);
+      const data = await loginApi(email, password);
       console.log("✅ Respuesta del backend LOGIN:", data);
 
       if (data.token) {
         login({
-          email: correo,
+          email,
           rol: data.rol || "ROLE_USER",
           token: data.token,
         });
@@ -55,7 +55,7 @@ export default function Login() {
             type="email"
             placeholder="Correo electrónico"
             value={correo}
-            onChange={(e) => setCorreo(e.target.value)}
+            onChange={(e) => setEmail(e.target.value)}
           />
         </div>
         <div className="input-group">

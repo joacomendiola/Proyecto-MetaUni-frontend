@@ -13,7 +13,7 @@ export async function login(email, password) {
   if (!res.ok) {
     throw new Error("Error en login");
   }
-  return res.json(); // { token, ... }
+  return res.json(); // { token, rol, email }
 }
 
 export async function register(user) {

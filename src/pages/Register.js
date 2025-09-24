@@ -10,13 +10,13 @@ import "../index.css";
 export default function Register() {
   const [showPassword, setShowPassword] = useState(false);
   const [nombre, setNombre] = useState("");
-  const [correo, setCorreo] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   // Manejo del registro con validaciones
   const handleRegister = async (e) => {
     e.preventDefault();
-    console.log("👉 Enviando datos de registro:", { nombre, correo, password });
+    console.log("👉 Enviando datos de registro:", { nombre, email, password });
 
     if (nombre.trim().length < 3) {
       return toast.error("⚠️ El nombre debe tener al menos 3 caracteres");
@@ -31,7 +31,7 @@ export default function Register() {
     try {
       const data = await registerApi({
         nombre,
-        email: correo,
+        email,
         password,
       });
 
@@ -66,8 +66,8 @@ export default function Register() {
           <input
             type="email"
             placeholder="Correo electrónico"
-            value={correo}
-            onChange={(e) => setCorreo(e.target.value)}
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
           />
         </div>
         <div className="input-group">
