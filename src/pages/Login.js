@@ -18,7 +18,7 @@ export default function Login() {
     e.preventDefault();
     console.log("👉 Enviando datos LOGIN:", { email, password });
 
-    if (!correo.includes("@")) {
+    if (!email.includes("@")) {
       return toast.error("⚠️ Correo inválido");
     }
     if (password.length < 6) {
@@ -54,7 +54,7 @@ export default function Login() {
           <input
             type="email"
             placeholder="Correo electrónico"
-            value={correo}
+            value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
         </div>

@@ -21,7 +21,7 @@ export default function Register() {
     if (nombre.trim().length < 3) {
       return toast.error("⚠️ El nombre debe tener al menos 3 caracteres");
     }
-    if (!correo.includes("@")) {
+    if (!email.includes("@")) {
       return toast.error("⚠️ Correo inválido");
     }
     if (password.length < 6) {
