@@ -40,6 +40,25 @@ export async function register(user) {
   }
   return res.json();
 }
+export async function testCors() {
+  try {
+    const res = await fetch(`${API_URL}/auth/test-cors`, {
+      method: "GET",
+      credentials: "include",
+    });
+
+    if (!res.ok) {
+      throw new Error(`Error CORS: ${res.status}`);
+    }
+
+    const text = await res.text();
+    console.log("CORS test OK:", text);
+    return text;
+  } catch (error) {
+    console.error("CORS test error:", error);
+    throw error;
+  }
+}
 
 // ================== CARRERAS ==================
 export async function getCarreras(token) {
