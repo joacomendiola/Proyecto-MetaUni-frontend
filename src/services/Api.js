@@ -1,4 +1,3 @@
-
 const API_URL = "https://proyecto-metauni-backend.onrender.com/api";
 
 // ================== AUTH ==================
@@ -21,9 +20,8 @@ export async function login(email, password) {
 
     return await res.json(); // { token, rol, email }
   } catch (error) {
-    // Podés loguear el error si querés
     console.error("Login error:", error);
-    throw error; // lo re-lanzás para que el componente lo capture
+    throw error;
   }
 }
 
@@ -32,7 +30,7 @@ export async function register(user) {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(user),
-    credentials: "include",   
+    credentials: "include",
   });
 
   if (!res.ok) {
@@ -40,6 +38,7 @@ export async function register(user) {
   }
   return res.json();
 }
+
 export async function testCors() {
   try {
     const res = await fetch(`${API_URL}/auth/test-cors`, {
@@ -58,75 +57,6 @@ export async function testCors() {
     console.error("CORS test error:", error);
     throw error;
   }
-}
-
-// ================== CARRERAS ==================
-export async function getCarreras(token) {
-  const res = await fetch(`${API_URL}/carreras`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json",
-    },
-    credentials: "include",   
-  });
-
-  if (!res.ok) {
-    throw new Error("Error al obtener carreras");
-  }
-  return res.json();
-}
-
-export async function getCarrera(id, token) {
-  const res = await fetch(`${API_URL}/carreras/${id}`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json",
-    },
-    credentials: "include",   
-  });
-
-  if (!res.ok) {
-    throw new Error("Error al obtener carrera");
-  }
-  return res.json();
-}
-
-export async function createCarrera(carrera, token) {
-  const res = await fetch(`${API_URL}/carreras`, {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(carrera),
-    credentials: "include",   
-  });
-  if (!res.ok) throw new Error("Error al crear carrera");
-  return res.json();
-}
-
-export async function updateCarrera(id, carrera, token) {
-  const res = await fetch(`${API_URL}/carreras/${id}`, {
-    method: "PUT",
-    headers: {
-      Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(carrera),
-    credentials: "include",   
-  });
-  if (!res.ok) throw new Error("Error al actualizar carrera");
-  return res.json();
-}
-
-export async function deleteCarrera(id, token) {
-  const res = await fetch(`${API_URL}/carreras/${id}`, {
-    method: "DELETE",
-    headers: { Authorization: `Bearer ${token}` },
-    credentials: "include",   
-  });
-  if (!res.ok) throw new Error("Error al eliminar carrera");
-  return true;
 }
 
 // ================== CARRERAS ==================
@@ -187,7 +117,6 @@ export async function deleteCarrera(id, token) {
 }
 
 // ================== MATERIAS ==================
-//  obtener materias de una carrera
 export async function getMateriasByCarrera(carreraId, token) {
   const res = await fetch(`${API_URL}/materias/carrera/${carreraId}`, {
     headers: { Authorization: `Bearer ${token}` },
@@ -197,7 +126,6 @@ export async function getMateriasByCarrera(carreraId, token) {
   return res.json();
 }
 
-//  crear materia dentro de una carrera
 export async function createMateriaInCarrera(carreraId, materia, token) {
   const res = await fetch(`${API_URL}/materias/${carreraId}`, {
     method: "POST",
@@ -212,14 +140,35 @@ export async function createMateriaInCarrera(carreraId, materia, token) {
   return res.json();
 }
 
-// ================== USUARIOS ==================
-export async function getUsuarios(token) {
-  const res = await fetch(`${API_URL}/usuarios`, {
+export async function updateMateria(id, materia, token) {
+  const res = await fetch(`${API_URL}/materias/${id}`, {
+    method: "PUT",
     headers: {
       Authorization: `Bearer ${token}`,
       "Content-Type": "application/json",
     },
-    credentials: "include",   
+    body: JSON.stringify(materia),
+    credentials: "include",
+  });
+  if (!res.ok) throw new Error("Error al actualizar materia");
+  return res.json();
+}
+
+export async function deleteMateria(id, token) {
+  const res = await fetch(`${API_URL}/materias/${id}`, {
+    method: "DELETE",
+    headers: { Authorization: `Bearer ${token}` },
+    credentials: "include",
+  });
+  if (!res.ok) throw new Error("Error al eliminar materia");
+  return true;
+}
+
+// ================== USUARIOS ==================
+export async function getUsuarios(token) {
+  const res = await fetch(`${API_URL}/usuarios`, {
+    headers: { Authorization: `Bearer ${token}` },
+    credentials: "include",
   });
   if (!res.ok) throw new Error("Error al obtener usuarios");
   return res.json();
@@ -227,11 +176,8 @@ export async function getUsuarios(token) {
 
 export async function getUsuario(id, token) {
   const res = await fetch(`${API_URL}/usuarios/${id}`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json",
-    },
-    credentials: "include",   
+    headers: { Authorization: `Bearer ${token}` },
+    credentials: "include",
   });
   if (!res.ok) throw new Error("Error al obtener usuario");
   return res.json();
@@ -245,7 +191,7 @@ export async function updateUsuario(id, usuario, token) {
       "Content-Type": "application/json",
     },
     body: JSON.stringify(usuario),
-    credentials: "include",   
+    credentials: "include",
   });
   if (!res.ok) throw new Error("Error al actualizar usuario");
   return res.json();
@@ -255,7 +201,7 @@ export async function deleteUsuario(id, token) {
   const res = await fetch(`${API_URL}/usuarios/${id}`, {
     method: "DELETE",
     headers: { Authorization: `Bearer ${token}` },
-    credentials: "include",  
+    credentials: "include",
   });
   if (!res.ok) throw new Error("Error al eliminar usuario");
   return true;
