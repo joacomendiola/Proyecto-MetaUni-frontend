@@ -129,55 +129,87 @@ export async function deleteCarrera(id, token) {
   return true;
 }
 
-// ================== MATERIAS ==================
-export async function getMaterias(token) {
-  const res = await fetch(`${API_URL}/materias`, {
+// ================== CARRERAS ==================
+export async function getCarreras(token) {
+  const res = await fetch(`${API_URL}/carreras`, {
+    headers: { Authorization: `Bearer ${token}` },
+    credentials: "include",
+  });
+  if (!res.ok) throw new Error("Error al obtener carreras");
+  return res.json();
+}
+
+export async function getCarrera(id, token) {
+  const res = await fetch(`${API_URL}/carreras/${id}`, {
+    headers: { Authorization: `Bearer ${token}` },
+    credentials: "include",
+  });
+  if (!res.ok) throw new Error("Error al obtener carrera");
+  return res.json();
+}
+
+export async function createCarrera(carrera, token) {
+  const res = await fetch(`${API_URL}/carreras`, {
+    method: "POST",
     headers: {
       Authorization: `Bearer ${token}`,
       "Content-Type": "application/json",
     },
-    credentials: "include",   
+    body: JSON.stringify(carrera),
+    credentials: "include",
+  });
+  if (!res.ok) throw new Error("Error al crear carrera");
+  return res.json();
+}
+
+export async function updateCarrera(id, carrera, token) {
+  const res = await fetch(`${API_URL}/carreras/${id}`, {
+    method: "PUT",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(carrera),
+    credentials: "include",
+  });
+  if (!res.ok) throw new Error("Error al actualizar carrera");
+  return res.json();
+}
+
+export async function deleteCarrera(id, token) {
+  const res = await fetch(`${API_URL}/carreras/${id}`, {
+    method: "DELETE",
+    headers: { Authorization: `Bearer ${token}` },
+    credentials: "include",
+  });
+  if (!res.ok) throw new Error("Error al eliminar carrera");
+  return true;
+}
+
+// ================== MATERIAS ==================
+//  obtener materias de una carrera
+export async function getMateriasByCarrera(carreraId, token) {
+  const res = await fetch(`${API_URL}/materias/carrera/${carreraId}`, {
+    headers: { Authorization: `Bearer ${token}` },
+    credentials: "include",
   });
   if (!res.ok) throw new Error("Error al obtener materias");
   return res.json();
 }
 
-export async function createMateria(materia, token) {
-  const res = await fetch(`${API_URL}/materias`, {
+//  crear materia dentro de una carrera
+export async function createMateriaInCarrera(carreraId, materia, token) {
+  const res = await fetch(`${API_URL}/materias/${carreraId}`, {
     method: "POST",
     headers: {
       Authorization: `Bearer ${token}`,
       "Content-Type": "application/json",
     },
     body: JSON.stringify(materia),
-    credentials: "include",   
+    credentials: "include",
   });
   if (!res.ok) throw new Error("Error al crear materia");
   return res.json();
-}
-
-export async function updateMateria(id, materia, token) {
-  const res = await fetch(`${API_URL}/materias/${id}`, {
-    method: "PUT",
-    headers: {
-      Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(materia),
-    credentials: "include",   
-  });
-  if (!res.ok) throw new Error("Error al actualizar materia");
-  return res.json();
-}
-
-export async function deleteMateria(id, token) {
-  const res = await fetch(`${API_URL}/materias/${id}`, {
-    method: "DELETE",
-    headers: { Authorization: `Bearer ${token}` },
-    credentials: "include",   
-  });
-  if (!res.ok) throw new Error("Error al eliminar materia");
-  return true;
 }
 
 // ================== USUARIOS ==================

@@ -1,8 +1,8 @@
 // ================== IMPORTS ==================
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { FaPaintBrush } from "react-icons/fa"; 
-import { getCarreras } from "../services/Api"; 
+import { FaPaintBrush } from "react-icons/fa";
+import { getCarreras, updateCarrera, createCarrera } from "../services/Api"; // ✅ agregamos createCarrera
 import { useAuth } from "../context/AuthContext";
 import "../index.css";
 
@@ -31,35 +31,84 @@ export default function Dashboard() {
   const [carreras, setCarreras] = useState([]);
   const [showPalette, setShowPalette] = useState(null);
 
+  // ✅ estado para nueva carrera
+  const [nuevaCarrera, setNuevaCarrera] = useState("");
+  const [colorCarrera, setColorCarrera] = useState("#6366f1"); // default violeta
+
   // ================== CARGAR CARRERAS DEL BACKEND ==================
   useEffect(() => {
     if (user?.token) {
-      console.log("👉 Pidiendo carreras al backend con token:", user.token);
       getCarreras(user.token)
-        .then((data) => {
-          console.log("✅ Respuesta del backend (carreras):", data);
-          if (Array.isArray(data)) {
-            setCarreras(data);
-          }
-        })
+        .then(setCarreras)
         .catch((err) => console.error("⚠️ Error cargando carreras:", err));
     }
   }, [user]);
 
-  // ================== CAMBIAR COLOR LOCAL ==================
-  const handleColorChange = (id, color) => {
-    setCarreras(carreras.map(c => 
-      c.id === id ? { ...c, color } : c
-    ));
-    setShowPalette(null);
+  // ================== CAMBIAR COLOR LOCAL Y PERSISTIR ==================
+  const handleColorChange = async (carrera, color) => {
+    try {
+      const updated = await updateCarrera(
+        carrera.id,
+        { ...carrera, colorBarra: color },
+        user.token
+      );
+      setCarreras(carreras.map((c) => (c.id === carrera.id ? updated : c)));
+      setShowPalette(null);
+    } catch (err) {
+      console.error("⚠️ Error actualizando color:", err);
+    }
+  };
+
+  // ================== CREAR NUEVA CARRERA ==================
+  const handleCrearCarrera = async () => {
+    if (!nuevaCarrera) return;
+    try {
+      const carrera = await createCarrera(
+        { nombre: nuevaCarrera, totalMaterias: 0, colorBarra: colorCarrera },
+        user.token
+      );
+      setCarreras([...carreras, carrera]); //  actualizamos lista local
+      setNuevaCarrera("");
+      setColorCarrera("#6366f1"); // reset al default
+    } catch (err) {
+      console.error("⚠️ Error creando carrera:", err);
+    }
   };
 
   return (
     <div className="dashboard">
       <h2>Mis Carreras</h2>
+
+      {/*  FORMULARIO NUEVA CARRERA */}
+      <div className="add-career">
+        <input
+          type="text"
+          value={nuevaCarrera}
+          onChange={(e) => setNuevaCarrera(e.target.value)}
+          placeholder="Nombre de la carrera"
+        />
+        <select
+          value={colorCarrera}
+          onChange={(e) => setColorCarrera(e.target.value)}
+        >
+          {Object.entries(colorMap).map(([nombre, hex]) => (
+            <option key={nombre} value={hex}>
+              {nombre}
+            </option>
+          ))}
+        </select>
+        <button onClick={handleCrearCarrera}>Agregar Carrera</button>
+      </div>
+
+      {/*  LISTADO DE CARRERAS */}
       <div className="careers-container">
         {carreras.map((c) => {
-          const porcentaje = (c.aprobadas / c.totalMaterias) * 100;
+          // calcular materias aprobadas (notaFinal >= 6)
+          const aprobadas = c.materias
+            ? c.materias.filter((m) => m.notaFinal >= 6).length
+            : 0;
+          const porcentaje =
+            c.totalMaterias > 0 ? (aprobadas / c.totalMaterias) * 100 : 0;
 
           return (
             <div key={c.id} className="career-card">
@@ -78,13 +127,13 @@ export default function Dashboard() {
                   className="progress"
                   style={{
                     width: `${porcentaje}%`,
-                    background: c.color || "#6366f1",
+                    background: c.colorBarra || "#6366f1",
                   }}
                 ></div>
               </div>
 
               <p>
-                {c.aprobadas}/{c.totalMaterias} materias aprobadas
+                {aprobadas}/{c.totalMaterias} materias aprobadas
               </p>
               <p>{porcentaje.toFixed(0)}% completado</p>
 
@@ -94,6 +143,7 @@ export default function Dashboard() {
                 </Link>
               </div>
 
+              {/* ✅ Selector de colores al editar */}
               {showPalette === c.id && (
                 <div className="palette-popup">
                   {Object.entries(colorMap).map(([nombre, hex]) => (
@@ -102,10 +152,11 @@ export default function Dashboard() {
                       className="color-circle"
                       style={{
                         background: hex,
-                        border: c.color === hex ? "3px solid white" : "none",
+                        border:
+                          c.colorBarra === hex ? "3px solid white" : "none",
                       }}
                       title={nombre}
-                      onClick={() => handleColorChange(c.id, hex)}
+                      onClick={() => handleColorChange(c, hex)}
                     />
                   ))}
                 </div>
@@ -117,4 +168,3 @@ export default function Dashboard() {
     </div>
   );
 }
-
