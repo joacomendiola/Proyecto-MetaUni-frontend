@@ -1,9 +1,9 @@
 // ================== IMPORTS ==================
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { FaUserAlt, FaLock } from "react-icons/fa";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 import { toast } from "react-toastify";
-import { login as loginApi, testCors } from "../services/Api";
+import { login as loginApi } from "../services/Api";   
 import { useAuth } from "../context/AuthContext";
 import "../index.css";
 
@@ -14,13 +14,6 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const { login } = useAuth();
-
-  //  Test CORS al cargar el componente
-  useEffect(() => {
-    testCors()
-      .then(msg => console.log("CORS OK:", msg))
-      .catch(err => console.error("CORS bloqueado:", err));
-  }, []);
 
   const handleLogin = async (e) => {
     e.preventDefault();
