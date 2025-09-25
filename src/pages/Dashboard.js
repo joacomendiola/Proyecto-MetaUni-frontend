@@ -39,7 +39,7 @@ export default function Dashboard() {
   // ================== CARGAR CARRERAS ==================
   useEffect(() => {
     if (user?.token) {
-      getCarreras(user.token)
+      getCarreras()
         .then((data) => setCarreras(data))
         .catch((err) => {
           console.error("❌ Error cargando carreras:", err);
@@ -56,11 +56,10 @@ export default function Dashboard() {
   // ================== CAMBIAR COLOR ==================
   const handleColorChange = async (carrera, color) => {
     try {
-      const updated = await updateCarrera(
-        carrera.id,
-        { ...carrera, colorBarra: color },
-        user.token
-      );
+      const updated = await updateCarrera(carrera.id, {
+        ...carrera,
+        colorBarra: color,
+      });
       setCarreras((prev) =>
         prev.map((c) => (c.id === carrera.id ? updated : c))
       );
@@ -76,8 +75,10 @@ export default function Dashboard() {
     if (!carreraAEliminar) return;
 
     try {
-      await deleteCarrera(carreraAEliminar.id, user.token);
-      setCarreras((prev) => prev.filter((c) => c.id !== carreraAEliminar.id));
+      await deleteCarrera(carreraAEliminar.id);
+      setCarreras((prev) =>
+        prev.filter((c) => c.id !== carreraAEliminar.id)
+      );
       toast.success(`🗑️ Carrera "${carreraAEliminar.nombre}" eliminada`);
       setCarreraAEliminar(null);
     } catch (err) {
@@ -290,3 +291,4 @@ export default function Dashboard() {
     </div>
   );
 }
+

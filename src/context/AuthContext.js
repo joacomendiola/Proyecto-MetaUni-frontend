@@ -1,7 +1,6 @@
 // ================== IMPORTS ==================
 import React, { createContext, useContext, useState, useEffect } from "react";
 
-// ================== CREAR CONTEXTO ==================
 const AuthContext = createContext();
 
 // ================== PROVIDER ==================
@@ -20,10 +19,16 @@ export function AuthProvider({ children }) {
   }, [user]);
 
   // 🔹 Login: guarda info + token
-  const login = (userData) => {
-    setUser(userData);
+  const login = (data) => {
+    // data = { token, email, rol }
+    setUser({
+      email: data.email,
+      rol: data.rol,
+      token: data.token, //  guardar token explícito
+    });
   };
 
+  // 🔹 Logout
   const logout = () => {
     setUser(null);
     localStorage.removeItem("user");
@@ -40,4 +45,3 @@ export function AuthProvider({ children }) {
 export function useAuth() {
   return useContext(AuthContext);
 }
-

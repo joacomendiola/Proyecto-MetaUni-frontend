@@ -1,13 +1,11 @@
 import React, { useState } from "react";
 import SelectorColor from "../components/SelectorColor";
 import { createCarrera } from "../services/Api";
-import { useAuth } from "../context/AuthContext";
 import { toast } from "react-toastify";
 
 export default function CrearCarrera({ onCarreraCreada }) {
   const [nombre, setNombre] = useState("");
-  const [colorBarra, setColorBarra] = useState("violeta"); 
-  const { user } = useAuth(); // 👉 trae el token
+  const [colorBarra, setColorBarra] = useState("violeta");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -17,18 +15,18 @@ export default function CrearCarrera({ onCarreraCreada }) {
     }
 
     try {
-      const nuevaCarrera = await createCarrera(
-        { nombre, colorBarra, totalMaterias: 0 },
-        user.token // 👉 acá va el token
-      );
+      const nuevaCarrera = await createCarrera({
+        nombre,
+        colorBarra,
+        totalMaterias: 0,
+      });
 
-      toast.success(" Carrera creada con éxito");
+      toast.success("✅ Carrera creada con éxito");
       setNombre("");
       setColorBarra("violeta");
 
-      // si queremos refrescar la lista en el Dashboard
+      // refrescar lista en el Dashboard
       if (onCarreraCreada) onCarreraCreada(nuevaCarrera);
-
     } catch (err) {
       console.error("❌ Error al crear carrera:", err);
       toast.error("❌ No se pudo crear la carrera");
@@ -44,7 +42,7 @@ export default function CrearCarrera({ onCarreraCreada }) {
         borderRadius: "12px",
         boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
         maxWidth: "400px",
-        margin: "40px auto"
+        margin: "40px auto",
       }}
     >
       <h2>Crear Carrera</h2>
@@ -58,7 +56,7 @@ export default function CrearCarrera({ onCarreraCreada }) {
           padding: "10px",
           margin: "10px 0",
           borderRadius: "8px",
-          border: "1px solid #ddd"
+          border: "1px solid #ddd",
         }}
       />
 
@@ -76,7 +74,7 @@ export default function CrearCarrera({ onCarreraCreada }) {
           border: "none",
           borderRadius: "8px",
           cursor: "pointer",
-          fontWeight: "600"
+          fontWeight: "600",
         }}
       >
         Guardar Carrera

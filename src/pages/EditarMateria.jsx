@@ -1,22 +1,19 @@
 // ================== IMPORTS ==================
 import React, { useState } from "react";
 import { updateMateria, deleteMateria } from "../services/Api";
-import { useAuth } from "../context/AuthContext";
 import { toast } from "react-toastify";
 
 // ================== COMPONENTE ==================
 export default function EditarMateria({ materia, onMateriaActualizada, onMateriaEliminada }) {
-  const { user } = useAuth();
   const [nota, setNota] = useState(materia.notaFinal || 0);
 
   // ================== ACTUALIZAR NOTA ==================
   const handleBlur = async () => {
     try {
-      const actualizada = await updateMateria(
-        materia.id,
-        { ...materia, notaFinal: parseFloat(nota) || 0 },
-        user.token
-      );
+      const actualizada = await updateMateria(materia.id, {
+        ...materia,
+        notaFinal: parseFloat(nota) || 0,
+      });
       onMateriaActualizada(actualizada);
       toast.success("✅ Nota actualizada");
     } catch (err) {
@@ -29,7 +26,7 @@ export default function EditarMateria({ materia, onMateriaActualizada, onMateria
   const handleEliminar = async () => {
     if (!window.confirm(`¿Seguro que deseas eliminar "${materia.nombre}"?`)) return;
     try {
-      await deleteMateria(materia.id, user.token);
+      await deleteMateria(materia.id);
       onMateriaEliminada(materia.id);
       toast.success("🗑️ Materia eliminada");
     } catch (err) {

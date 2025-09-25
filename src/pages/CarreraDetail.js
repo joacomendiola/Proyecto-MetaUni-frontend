@@ -8,7 +8,6 @@ import {
   updateMateria,
   deleteMateria,
 } from "../services/Api";
-import { useAuth } from "../context/AuthContext";
 import { toast } from "react-toastify";
 import { FaTrash } from "react-icons/fa";
 import { motion, AnimatePresence } from "framer-motion"; // 🔹 animación
@@ -17,7 +16,6 @@ import "../index.css";
 // ================== DETALLE DE CARRERA ==================
 export default function CarreraDetail() {
   const { id } = useParams();
-  const { user } = useAuth();
 
   const [materias, setMaterias] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -25,37 +23,40 @@ export default function CarreraDetail() {
   const [materiaAEliminar, setMateriaAEliminar] = useState(null);
 
   useEffect(() => {
-    if (user?.token) {
-      getMateriasByCarrera(id, user.token)
-        .then(setMaterias)
-        .catch((err) => console.error("⚠️ Error al obtener materias:", err))
-        .finally(() => setLoading(false));
-    }
-  }, [id, user]);
+    getMateriasByCarrera(id)
+      .then(setMaterias)
+      .catch((err) => console.error("⚠️ Error al obtener materias:", err))
+      .finally(() => setLoading(false));
+  }, [id]);
 
   // ================== AGREGAR MATERIA ==================
   async function handleAgregarMateria() {
     if (!nuevaMateria) return;
-    const materia = await createMateriaInCarrera(
-      id,
-      { nombre: nuevaMateria, notaFinal: 0 },
-      user.token
-    );
-    setMaterias([...materias, materia]);
-    setNuevaMateria("");
+    try {
+      const materia = await createMateriaInCarrera(id, {
+        nombre: nuevaMateria,
+        notaFinal: 0,
+      });
+      setMaterias([...materias, materia]);
+      setNuevaMateria("");
+      toast.success("✅ Materia creada con éxito");
+    } catch (err) {
+      console.error("❌ Error al crear materia:", err);
+      toast.error("Error al crear materia");
+    }
   }
 
   // ================== ACTUALIZAR NOTA ==================
   async function handleActualizarNota(materia, nuevaNota) {
     try {
-      const actualizada = await updateMateria(
-        materia.id,
-        { ...materia, notaFinal: parseFloat(nuevaNota) },
-        user.token
-      );
+      const actualizada = await updateMateria(materia.id, {
+        ...materia,
+        notaFinal: parseFloat(nuevaNota),
+      });
       setMaterias(materias.map((m) => (m.id === materia.id ? actualizada : m)));
     } catch (err) {
       console.error("⚠️ Error actualizando nota:", err);
+      toast.error("Error al actualizar nota");
     }
   }
 
@@ -63,7 +64,7 @@ export default function CarreraDetail() {
   async function handleEliminarConfirmado() {
     if (!materiaAEliminar) return;
     try {
-      await deleteMateria(materiaAEliminar.id, user.token);
+      await deleteMateria(materiaAEliminar.id);
       setMaterias((prev) =>
         prev.filter((m) => m.id !== materiaAEliminar.id)
       );
