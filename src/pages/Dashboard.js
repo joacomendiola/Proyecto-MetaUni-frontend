@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { FaPaintBrush } from "react-icons/fa";
-import { getCarreras, updateCarrera, createCarrera } from "../services/Api"; // ✅ agregamos createCarrera
+import { getCarreras, updateCarrera, createCarrera } from "../services/Api";
 import { useAuth } from "../context/AuthContext";
 import "../index.css";
 
@@ -31,11 +31,11 @@ export default function Dashboard() {
   const [carreras, setCarreras] = useState([]);
   const [showPalette, setShowPalette] = useState(null);
 
-  // ✅ estado para nueva carrera
+  // estado para nueva carrera
   const [nuevaCarrera, setNuevaCarrera] = useState("");
-  const [colorCarrera, setColorCarrera] = useState("#6366f1"); // default violeta
+  const [colorCarrera, setColorCarrera] = useState("#6366f1");
 
-  // ================== CARGAR CARRERAS DEL BACKEND ==================
+  // ================== CARGAR CARRERAS ==================
   useEffect(() => {
     if (user?.token) {
       getCarreras(user.token)
@@ -44,7 +44,7 @@ export default function Dashboard() {
     }
   }, [user]);
 
-  // ================== CAMBIAR COLOR LOCAL Y PERSISTIR ==================
+  // ================== CAMBIAR COLOR ==================
   const handleColorChange = async (carrera, color) => {
     try {
       const updated = await updateCarrera(
@@ -59,17 +59,20 @@ export default function Dashboard() {
     }
   };
 
-  // ================== CREAR NUEVA CARRERA ==================
+  // ================== CREAR CARRERA ==================
   const handleCrearCarrera = async () => {
     if (!nuevaCarrera) return;
     try {
-      const carrera = await createCarrera(
+      await createCarrera(
         { nombre: nuevaCarrera, totalMaterias: 0, colorBarra: colorCarrera },
         user.token
       );
-      setCarreras([...carreras, carrera]); //  actualizamos lista local
+      //  recargamos lista desde el backend
+      const updated = await getCarreras(user.token);
+      setCarreras(updated);
+
       setNuevaCarrera("");
-      setColorCarrera("#6366f1"); // reset al default
+      setColorCarrera("#6366f1");
     } catch (err) {
       console.error("⚠️ Error creando carrera:", err);
     }
@@ -79,7 +82,7 @@ export default function Dashboard() {
     <div className="dashboard">
       <h2>Mis Carreras</h2>
 
-      {/*  FORMULARIO NUEVA CARRERA */}
+      {/* FORMULARIO NUEVA CARRERA */}
       <div className="add-career">
         <input
           type="text"
@@ -100,11 +103,10 @@ export default function Dashboard() {
         <button onClick={handleCrearCarrera}>Agregar Carrera</button>
       </div>
 
-      {/*  LISTADO DE CARRERAS */}
+      {/* LISTADO DE CARRERAS */}
       <div className="careers-container">
         {carreras.map((c) => {
-          // calcular materias aprobadas (notaFinal >= 6)
-          const aprobadas = c.materias
+          const aprobadas = Array.isArray(c.materias)
             ? c.materias.filter((m) => m.notaFinal >= 6).length
             : 0;
           const porcentaje =
@@ -143,7 +145,6 @@ export default function Dashboard() {
                 </Link>
               </div>
 
-              {/* ✅ Selector de colores al editar */}
               {showPalette === c.id && (
                 <div className="palette-popup">
                   {Object.entries(colorMap).map(([nombre, hex]) => (
