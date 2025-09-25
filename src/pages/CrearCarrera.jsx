@@ -1,22 +1,38 @@
 import React, { useState } from "react";
 import SelectorColor from "../components/SelectorColor";
+import { createCarrera } from "../services/Api";
+import { useAuth } from "../context/AuthContext";
+import { toast } from "react-toastify";
 
-export default function CrearCarrera() {
+export default function CrearCarrera({ onCarreraCreada }) {
   const [nombre, setNombre] = useState("");
-  const [colorBarra, setColorBarra] = useState("violeta"); // valor por defecto
+  const [colorBarra, setColorBarra] = useState("violeta"); 
+  const { user } = useAuth(); // 👉 trae el token
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const nuevaCarrera = { nombre, colorBarra };
 
-    console.log("Carrera a guardar:", nuevaCarrera);
+    if (!nombre) {
+      return toast.error("⚠️ El nombre de la carrera es obligatorio");
+    }
 
-    // 👇 aquí deberías mandar al backend
-    // fetch("http://localhost:8080/api/carreras", {
-    //   method: "POST",
-    //   headers: { "Content-Type": "application/json" },
-    //   body: JSON.stringify(nuevaCarrera)
-    // });
+    try {
+      const nuevaCarrera = await createCarrera(
+        { nombre, colorBarra, totalMaterias: 0 },
+        user.token // 👉 acá va el token
+      );
+
+      toast.success(" Carrera creada con éxito");
+      setNombre("");
+      setColorBarra("violeta");
+
+      // si queremos refrescar la lista en el Dashboard
+      if (onCarreraCreada) onCarreraCreada(nuevaCarrera);
+
+    } catch (err) {
+      console.error("❌ Error al crear carrera:", err);
+      toast.error("❌ No se pudo crear la carrera");
+    }
   };
 
   return (

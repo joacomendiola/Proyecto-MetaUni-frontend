@@ -1,13 +1,17 @@
 // ================== IMPORTS ==================
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import LoadingSpinner from "../components/LoadingSpinner";
 import {
   getMateriasByCarrera,
   createMateriaInCarrera,
-  updateMateria, //  usamos updateMateria
+  updateMateria,
+  deleteMateria,
 } from "../services/Api";
 import { useAuth } from "../context/AuthContext";
+import { toast } from "react-toastify";
+import { FaTrash } from "react-icons/fa";
+import { motion, AnimatePresence } from "framer-motion"; // 🔹 animación
 import "../index.css";
 
 // ================== DETALLE DE CARRERA ==================
@@ -18,6 +22,7 @@ export default function CarreraDetail() {
   const [materias, setMaterias] = useState([]);
   const [loading, setLoading] = useState(true);
   const [nuevaMateria, setNuevaMateria] = useState("");
+  const [materiaAEliminar, setMateriaAEliminar] = useState(null);
 
   useEffect(() => {
     if (user?.token) {
@@ -40,7 +45,7 @@ export default function CarreraDetail() {
     setNuevaMateria("");
   }
 
-  // ================== ACTUALIZAR NOTA DE UNA MATERIA ==================
+  // ================== ACTUALIZAR NOTA ==================
   async function handleActualizarNota(materia, nuevaNota) {
     try {
       const actualizada = await updateMateria(
@@ -54,6 +59,22 @@ export default function CarreraDetail() {
     }
   }
 
+  // ================== ELIMINAR MATERIA ==================
+  async function handleEliminarConfirmado() {
+    if (!materiaAEliminar) return;
+    try {
+      await deleteMateria(materiaAEliminar.id, user.token);
+      setMaterias((prev) =>
+        prev.filter((m) => m.id !== materiaAEliminar.id)
+      );
+      toast.success(`🗑️ Materia "${materiaAEliminar.nombre}" eliminada`);
+      setMateriaAEliminar(null);
+    } catch (err) {
+      console.error("❌ Error eliminando materia:", err);
+      toast.error("Error al eliminar materia");
+    }
+  }
+
   if (loading) {
     return <LoadingSpinner text="Cargando tus materias..." />;
   }
@@ -61,7 +82,8 @@ export default function CarreraDetail() {
   // ================== PROMEDIO GENERAL ==================
   const promedio =
     materias.length > 0
-      ? materias.reduce((acc, m) => acc + (m.notaFinal || 0), 0) / materias.length
+      ? materias.reduce((acc, m) => acc + (m.notaFinal || 0), 0) /
+        materias.length
       : 0;
 
   const getNotaColor = (nota) => {
@@ -89,7 +111,20 @@ export default function CarreraDetail() {
       <div className="materias-container">
         {materias.map((m) => (
           <div key={m.id} className="materia-card">
-            <h3>{m.nombre}</h3>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
+            >
+              <h3>{m.nombre}</h3>
+              <FaTrash
+                style={{ cursor: "pointer", color: "#ef4444" }}
+                onClick={() => setMateriaAEliminar(m)}
+              />
+            </div>
+
             <p>
               Nota final:{" "}
               <span style={{ color: getNotaColor(m.notaFinal || 0) }}>
@@ -114,6 +149,86 @@ export default function CarreraDetail() {
       <p className="promedio">
         Promedio general: {materias.length > 0 ? promedio.toFixed(2) : "N/A"}
       </p>
+
+      {/* ================== MODAL ELEGANTE DE ELIMINAR MATERIA ================== */}
+      <AnimatePresence>
+        {materiaAEliminar && (
+          <motion.div
+            key="overlay"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            style={{
+              position: "fixed",
+              top: 0,
+              left: 0,
+              width: "100vw",
+              height: "100vh",
+              background: "rgba(0,0,0,0.5)",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              zIndex: 1000,
+            }}
+          >
+            <motion.div
+              key="modal"
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.8 }}
+              transition={{ duration: 0.3 }}
+              style={{
+                background: "white",
+                padding: "30px",
+                borderRadius: "12px",
+                width: "400px",
+                textAlign: "center",
+              }}
+            >
+              <h3>¿Eliminar materia?</h3>
+              <p>
+                Estás por eliminar <b>{materiaAEliminar.nombre}</b>.  
+                Esta acción no se puede deshacer.
+              </p>
+              <div
+                style={{
+                  marginTop: "20px",
+                  display: "flex",
+                  gap: "15px",
+                  justifyContent: "center",
+                }}
+              >
+                <button
+                  onClick={() => setMateriaAEliminar(null)}
+                  style={{
+                    padding: "10px 15px",
+                    border: "none",
+                    borderRadius: "8px",
+                    background: "#6b7280",
+                    color: "white",
+                    cursor: "pointer",
+                  }}
+                >
+                  Cancelar
+                </button>
+                <button
+                  onClick={handleEliminarConfirmado}
+                  style={{
+                    padding: "10px 15px",
+                    border: "none",
+                    borderRadius: "8px",
+                    background: "#ef4444",
+                    color: "white",
+                    cursor: "pointer",
+                  }}
+                >
+                  Eliminar
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
