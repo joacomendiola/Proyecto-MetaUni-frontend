@@ -20,7 +20,7 @@ export function AuthProvider({ children }) {
 
   // 🔹 Login: guarda info + token
   const login = (data) => {
-    console.log("🔍 Guardando usuario en contexto:", data);
+    console.log("🔍 Guardando usuario en contexto:", JSON.stringify(data, null, 2));
     const userData = {
       id: data.id, //  Guardar el ID del usuario
       email: data.email,

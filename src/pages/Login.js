@@ -20,7 +20,7 @@ export default function Login() {
 
   try {
     const data = await loginApi(email, password);
-    console.log("✅ Respuesta COMPLETA del backend:", data); 
+    console.log("✅ Respuesta COMPLETA del backend:", JSON.stringify(data, null, 2)); 
 
     if (data.token) {
       // GUARDAR INMEDIATAMENTE en localStorage
