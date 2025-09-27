@@ -15,29 +15,35 @@ export default function Perfil() {
 
   // Función async para guardar
   const handleSave = async (e) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    if (editNombre.trim().length < 3) {
-      return toast.error("⚠️ El nombre debe tener al menos 3 caracteres");
-    }
-    if (!editCorreo.includes("@")) {
-      return toast.error("⚠️ Correo inválido");
-    }
+  if (editNombre.trim().length < 3) {
+    return toast.error("⚠️ El nombre debe tener al menos 3 caracteres");
+  }
+  if (!editCorreo.includes("@")) {
+    return toast.error("⚠️ Correo inválido");
+  }
 
-    try {
-      // Llamar al backend para actualizar
-      await updateUsuario(user.id, {
-        nombre: editNombre,
-        email: editCorreo
-      });
+  try {
+    // Llamar al backend para actualizar
+    await updateUsuario(user.id, {
+      nombre: editNombre,
+      email: editCorreo
+    });
 
-      toast.success("✅ Perfil actualizado correctamente en la base de datos");
+    // ✅ USAR updateUser DEL CONTEXTO EN LUGAR DE MANIPULAR LOCALSTORAGE DIRECTAMENTE
+    updateUser({
+      nombre: editNombre,
+      email: editCorreo
+    });
+    
+    toast.success("✅ Perfil actualizado correctamente");
 
-    } catch (err) {
-      console.error("❌ Error actualizando perfil:", err);
-      toast.error("❌ Error al actualizar el perfil");
-    }
-  };
+  } catch (err) {
+    console.error("❌ Error actualizando perfil:", err);
+    toast.error("❌ Error al actualizar el perfil");
+  }
+};
 
   return (
     <div className="card">

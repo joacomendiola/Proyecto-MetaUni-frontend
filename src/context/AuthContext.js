@@ -37,13 +37,17 @@ export function AuthProvider({ children }) {
     localStorage.removeItem("user");
   };
 
-  //  Actualizar usuario en contexto
-  const updateUser = (newData) => {
-    setUser(prevUser => ({
-      ...prevUser,
-      ...newData
-    }));
-  };
+  // 🔹 Actualizar usuario en contexto
+const updateUser = (newData) => {
+  setUser(prevUser => {
+    const updatedUser = { ...prevUser, ...newData };
+    
+    //  GUARDAR EN LOCALSTORAGE TAMBIÉN
+    localStorage.setItem("user", JSON.stringify(updatedUser));
+    
+    return updatedUser;
+  });
+};
 
   return (
     <AuthContext.Provider value={{ user, login, logout, updateUser }}> {/* ✅ AGREGAR updateUser */}
