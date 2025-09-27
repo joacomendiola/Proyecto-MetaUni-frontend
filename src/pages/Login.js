@@ -7,7 +7,6 @@ import { login as loginApi } from "../services/Api";
 import { useAuth } from "../context/AuthContext";
 import "../index.css";
 
-
 // ================== LOGIN ==================
 export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
@@ -31,11 +30,17 @@ export default function Login() {
       console.log("✅ Respuesta del backend LOGIN:", data);
 
       if (data.token) {
-        login({
-          email,
+        //  GUARDAR INMEDIATAMENTE en localStorage
+        const userData = {
+          email: data.email,
           rol: data.rol || "ROLE_USER",
-          token: data.token,
-        });
+          token: data.token
+        };
+        
+        localStorage.setItem("user", JSON.stringify(userData));
+        
+        // Luego actualizar el context
+        login(userData);
         toast.success("✅ Inicio de sesión exitoso!");
       } else {
         throw new Error("Credenciales inválidas");

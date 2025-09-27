@@ -2,8 +2,26 @@ const API_URL = "https://proyecto-metauni-backend.onrender.com/api";
 
 // ================== HELPER ==================
 async function request(endpoint, options = {}) {
-  const savedUser = JSON.parse(localStorage.getItem("user"));
-  const token = savedUser?.token;
+  //  SOLUCIÓN: Buscar siempre en localStorage actualizado
+  let token;
+  let userData;
+
+  try {
+    // Leer DIRECTAMENTE de localStorage (no del state de React)
+    const userStr = localStorage.getItem("user");
+    if (userStr) {
+      userData = JSON.parse(userStr);
+      token = userData?.token;
+    }
+  } catch (error) {
+    console.error("Error leyendo user de localStorage:", error);
+  }
+
+  //  DEBUG para ver qué está pasando
+  console.log("🔍 Api.js - Debug:");
+  console.log("- localStorage user:", userData);
+  console.log("- token encontrado:", token);
+  console.log("- endpoint:", endpoint);
 
   const headers = {
     "Content-Type": "application/json",
@@ -11,15 +29,24 @@ async function request(endpoint, options = {}) {
     ...options.headers,
   };
 
-  const res = await fetch(`${API_URL}${endpoint}`, { ...options, headers });
+  console.log("🔍 Headers Authorization:", headers.Authorization ? "PRESENTE" : "FALTANTE");
 
-  if (res.status === 401) throw new Error("No autorizado");
-  if (res.status === 403) throw new Error("Acceso prohibido");
-  if (!res.ok) throw new Error("Error en la petición");
+  try {
+    const res = await fetch(`${API_URL}${endpoint}`, { ...options, headers });
 
-  // Algunos DELETE devuelven vacío → evitar error en .json()
-  if (res.status === 204) return true;
-  return res.json();
+    console.log("🔍 Response status:", res.status, res.statusText);
+
+    if (res.status === 401) throw new Error("No autorizado");
+    if (res.status === 403) throw new Error("Acceso prohibido");
+    if (!res.ok) throw new Error(`Error HTTP: ${res.status}`);
+
+    if (res.status === 204) return true;
+    return res.json();
+
+  } catch (error) {
+    console.error("❌ Error en request:", error);
+    throw error;
+  }
 }
 
 // ================== AUTH ==================
