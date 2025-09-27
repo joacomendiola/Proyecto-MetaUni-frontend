@@ -1,18 +1,20 @@
 // ================== IMPORTS ==================
 import React, { useState } from "react";
 import { toast } from "react-toastify";
-import { useAuth } from "../context/AuthContext"; // ✅ usamos el contexto
+import { useAuth } from "../context/AuthContext";
+import { updateUsuario } from "../services/Api"; 
 import "../index.css";
 
 // ================== PERFIL ==================
 export default function Perfil() {
-  const { user, logout } = useAuth(); // ✅ ahora viene del contexto
+  const { user, logout } = useAuth();
 
   // Inputs para edición
   const [editNombre, setEditNombre] = useState(user?.nombre || "");
   const [editCorreo, setEditCorreo] = useState(user?.email || "");
 
-  const handleSave = (e) => {
+  // Función async para guardar
+  const handleSave = async (e) => {
     e.preventDefault();
 
     if (editNombre.trim().length < 3) {
@@ -22,8 +24,19 @@ export default function Perfil() {
       return toast.error("⚠️ Correo inválido");
     }
 
-    // En el futuro acá se llama al backend
-    toast.success("✅ Perfil actualizado");
+    try {
+      // Llamar al backend para actualizar
+      await updateUsuario(user.id, {
+        nombre: editNombre,
+        email: editCorreo
+      });
+
+      toast.success("✅ Perfil actualizado correctamente en la base de datos");
+
+    } catch (err) {
+      console.error("❌ Error actualizando perfil:", err);
+      toast.error("❌ Error al actualizar el perfil");
+    }
   };
 
   return (

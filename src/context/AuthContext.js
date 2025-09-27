@@ -22,6 +22,7 @@ export function AuthProvider({ children }) {
   const login = (data) => {
     console.log("🔍 Guardando usuario en contexto:", data);
     const userData = {
+      id: data.id, //  Guardar el ID del usuario
       email: data.email,
       rol: data.rol,
       token: data.token,
@@ -36,8 +37,16 @@ export function AuthProvider({ children }) {
     localStorage.removeItem("user");
   };
 
+  //  Actualizar usuario en contexto
+  const updateUser = (newData) => {
+    setUser(prevUser => ({
+      ...prevUser,
+      ...newData
+    }));
+  };
+
   return (
-    <AuthContext.Provider value={{ user, login, logout }}>
+    <AuthContext.Provider value={{ user, login, logout, updateUser }}> {/* ✅ AGREGAR updateUser */}
       {children}
     </AuthContext.Provider>
   );
