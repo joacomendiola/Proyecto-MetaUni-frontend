@@ -40,7 +40,15 @@ async function request(endpoint, options = {}) {
     if (res.status === 403) throw new Error("Acceso prohibido");
     if (!res.ok) throw new Error(`Error HTTP: ${res.status}`);
 
-    if (res.status === 204) return true;
+    //  Manejar respuestas vacías de DELETE
+    if (res.status === 204) return { success: true }; // No content
+    if (res.status === 200) {
+      const contentLength = res.headers.get('content-length');
+      if (contentLength === '0' || !contentLength) {
+        return { success: true }; // Respuesta vacía pero exitosa
+      }
+    }
+    
     return res.json();
 
   } catch (error) {
@@ -133,4 +141,3 @@ export async function updateUsuario(id, usuario) {
 export async function deleteUsuario(id) {
   return request(`/usuarios/${id}`, { method: "DELETE" });
 }
-
