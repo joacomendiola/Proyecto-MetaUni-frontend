@@ -25,12 +25,14 @@ export default function Login() {
     if (data.token) {
       // GUARDAR INMEDIATAMENTE en localStorage
       const userData = {
+        id: data.id,           //  Agregar el ID
         email: data.email,
         rol: data.rol || "ROLE_USER",
         token: data.token,
         nombre: data.nombre || ''
       };
       
+      console.log("🔍 UserData a guardar:", userData); // Verificar que tenga ID
       localStorage.setItem("user", JSON.stringify(userData));
       login(userData);
       toast.success("✅ Inicio de sesión exitoso!");
