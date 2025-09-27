@@ -15,41 +15,33 @@ export default function Login() {
   const { login } = useAuth();
 
   const handleLogin = async (e) => {
-    e.preventDefault();
-    console.log("👉 Enviando datos LOGIN:", { email, password });
+  e.preventDefault();
+  console.log("👉 Enviando datos LOGIN:", { email, password });
 
-    if (!email.includes("@")) {
-      return toast.error("⚠️ Correo inválido");
-    }
-    if (password.length < 6) {
-      return toast.error("⚠️ La contraseña debe tener al menos 6 caracteres");
-    }
+  try {
+    const data = await loginApi(email, password);
+    console.log("✅ Respuesta COMPLETA del backend:", data); 
 
-    try {
-      const data = await loginApi(email, password);
-      console.log("✅ Respuesta del backend LOGIN:", data);
-
-      if (data.token) {
-        //  GUARDAR INMEDIATAMENTE en localStorage
-        const userData = {
-          email: data.email,
-          rol: data.rol || "ROLE_USER",
-          token: data.token
-        };
-        
-        localStorage.setItem("user", JSON.stringify(userData));
-        
-        // Luego actualizar el context
-        login(userData);
-        toast.success("✅ Inicio de sesión exitoso!");
-      } else {
-        throw new Error("Credenciales inválidas");
-      }
-    } catch (err) {
-      console.error("❌ Error en LOGIN:", err);
-      toast.error("❌ " + err.message);
+    if (data.token) {
+      // GUARDAR INMEDIATAMENTE en localStorage
+      const userData = {
+        email: data.email,
+        rol: data.rol || "ROLE_USER",
+        token: data.token,
+        nombre: data.nombre || ''
+      };
+      
+      localStorage.setItem("user", JSON.stringify(userData));
+      login(userData);
+      toast.success("✅ Inicio de sesión exitoso!");
+    } else {
+      throw new Error("Credenciales inválidas");
     }
-  };
+  } catch (err) {
+    console.error("❌ Error en LOGIN:", err);
+    toast.error("❌ " + err.message);
+  }
+};
 
   return (
     <div className="card">

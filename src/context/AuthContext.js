@@ -18,15 +18,17 @@ export function AuthProvider({ children }) {
     }
   }, [user]);
 
- // 🔹 Login: guarda info + token
-const login = (data) => {
-  setUser({
-    email: data.email,
-    rol: data.rol,
-    token: data.token,
-    nombre: data.nombre || '' 
-  });
-};
+  // 🔹 Login: guarda info + token
+  const login = (data) => {
+    console.log("🔍 Guardando usuario en contexto:", data);
+    const userData = {
+      email: data.email,
+      rol: data.rol,
+      token: data.token,
+      nombre: data.nombre || ''
+    };
+    setUser(userData);
+  };
 
   // 🔹 Logout
   const logout = () => {
