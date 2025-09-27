@@ -1,4 +1,4 @@
-const API_URL = "https://proyecto-metauni-backend.onrender.com/api";
+const API_URL = "https://proyecto-metauni-backend.onrender.com";
 
 // ================== HELPER ==================
 async function request(endpoint, options = {}) {
@@ -48,14 +48,14 @@ async function request(endpoint, options = {}) {
 
 // ================== AUTH ==================
 export async function login(email, password) {
-  return request("/auth/login", {
+  return request("/api/auth/login", { 
     method: "POST",
     body: JSON.stringify({ email, password }),
   });
 }
 
 export async function register(user) {
-  return request("/auth/register", {
+  return request("/api/auth/register", { 
     method: "POST",
     body: JSON.stringify(user),
   });
@@ -63,22 +63,22 @@ export async function register(user) {
 
 // ================== CARRERAS ==================
 export async function getCarreras() {
-  return request("/carreras");
+  return request("/api/carreras"); 
 }
 
 export async function getCarrera(id) {
-  return request(`/carreras/${id}`);
+  return request(`/api/carreras/${id}`); 
 }
 
 export async function createCarrera(carrera) {
-  return request("/carreras", {
+  return request("/api/carreras", { 
     method: "POST",
     body: JSON.stringify(carrera),
   });
 }
 
 export async function updateCarrera(id, carrera) {
-  return request(`/carreras/${id}`, {
+  return request(`/api/carreras/${id}`, { 
     method: "PUT",
     body: JSON.stringify(carrera),
   });
@@ -88,7 +88,7 @@ export async function deleteCarrera(id) {
   try {
     const token = JSON.parse(localStorage.getItem("user"))?.token;
     
-    const res = await fetch(`${API_URL}/carreras/${id}`, {
+    const res = await fetch(`${API_URL}/api/carreras/${id}`, { 
       method: "DELETE",
       headers: {
         "Authorization": `Bearer ${token || ""}`,
@@ -125,42 +125,43 @@ export async function deleteCarrera(id) {
 
 // ================== MATERIAS ==================
 export async function getMateriasByCarrera(carreraId) {
-  return request(`/materias/carrera/${carreraId}`);
+  return request(`/api/materias/carrera/${carreraId}`); 
 }
 
 export async function createMateriaInCarrera(carreraId, materia) {
-  return request(`/materias/${carreraId}`, {
+  return request(`/api/materias/${carreraId}`, {
     method: "POST",
     body: JSON.stringify(materia),
   });
 }
 
 export async function updateMateria(id, materia) {
-  return request(`/materias/${id}`, {
+  return request(`/api/materias/${id}`, { 
     method: "PUT",
     body: JSON.stringify(materia),
   });
 }
 
 export async function deleteMateria(id) {
-  return request(`/materias/${id}`, { method: "DELETE" });
+  return request(`/api/materias/${id}`, { method: "DELETE" }); 
 }
 
 // ================== USUARIOS ==================
 export async function getUsuarios() {
-  return request("/usuarios");  
+  return request("/api/usuarios"); 
 }
+
 export async function getUsuario(id) {
-  return request(`/usuarios/${id}`);  
+  return request(`/api/usuarios/${id}`); 
 }
 
 export async function updateUsuario(id, usuario) {
-  return request(`/usuarios/${id}`, { 
+  return request(`/api/usuarios/${id}`, { 
     method: "PUT",
     body: JSON.stringify(usuario),
   });
 }
 
 export async function deleteUsuario(id) {
-  return request(`/usuarios/${id}`, { method: "DELETE" });  
+  return request(`/api/usuarios/${id}`, { method: "DELETE" }); 
 }
