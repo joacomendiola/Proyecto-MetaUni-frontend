@@ -40,15 +40,7 @@ async function request(endpoint, options = {}) {
     if (res.status === 403) throw new Error("Acceso prohibido");
     if (!res.ok) throw new Error(`Error HTTP: ${res.status}`);
 
-    //  Manejar respuestas vacías de DELETE
-    if (res.status === 204) return { success: true }; // No content
-    if (res.status === 200) {
-      const contentLength = res.headers.get('content-length');
-      if (contentLength === '0' || !contentLength) {
-        return { success: true }; // Respuesta vacía pero exitosa
-      }
-    }
-    
+    if (res.status === 204) return true;
     return res.json();
 
   } catch (error) {
@@ -96,7 +88,45 @@ export async function updateCarrera(id, carrera) {
 }
 
 export async function deleteCarrera(id) {
-  return request(`/carreras/${id}`, { method: "DELETE" });
+  try {
+    const token = JSON.parse(localStorage.getItem("user"))?.token;
+    
+    const res = await fetch(`${API_URL}/carreras/${id}`, {
+      method: "DELETE",
+      headers: {
+        "Authorization": `Bearer ${token || ""}`,
+        "Content-Type": "application/json"
+      }
+    });
+
+    console.log("🔍 Delete carrera response status:", res.status, res.statusText);
+
+    if (res.status === 401) throw new Error("No autorizado");
+    if (res.status === 403) throw new Error("Acceso prohibido");
+    if (!res.ok) throw new Error(`Error HTTP: ${res.status}`);
+
+    // ¡Manejar respuestas vacías de DELETE
+    if (res.status === 204) {
+      return { success: true, message: "Carrera eliminada correctamente" };
+    }
+    
+    if (res.status === 200) {
+      // Verificar si la respuesta tiene contenido
+      const contentLength = res.headers.get('content-length');
+      const contentType = res.headers.get('content-type');
+      
+      if (contentLength === '0' || !contentLength || !contentType?.includes('application/json')) {
+        return { success: true, message: "Carrera eliminada correctamente" };
+      }
+    }
+
+    //  Si hay contenido JSON, parsearlo normalmente
+    return res.json();
+    
+  } catch (error) {
+    console.error("❌ Error eliminando carrera:", error);
+    throw error;
+  }
 }
 
 // ================== MATERIAS ==================
