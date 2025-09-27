@@ -2,12 +2,10 @@ const API_URL = "https://proyecto-metauni-backend.onrender.com/api";
 
 // ================== HELPER ==================
 async function request(endpoint, options = {}) {
-  //  SOLUCIÓN: Buscar siempre en localStorage actualizado
   let token;
   let userData;
 
   try {
-    // Leer DIRECTAMENTE de localStorage (no del state de React)
     const userStr = localStorage.getItem("user");
     if (userStr) {
       userData = JSON.parse(userStr);
@@ -17,7 +15,6 @@ async function request(endpoint, options = {}) {
     console.error("Error leyendo user de localStorage:", error);
   }
 
-  //  DEBUG para ver qué está pasando
   console.log("🔍 Api.js - Debug:");
   console.log("- localStorage user:", userData);
   console.log("- token encontrado:", token);
@@ -105,13 +102,11 @@ export async function deleteCarrera(id) {
     if (res.status === 403) throw new Error("Acceso prohibido");
     if (!res.ok) throw new Error(`Error HTTP: ${res.status}`);
 
-    // ¡Manejar respuestas vacías de DELETE
     if (res.status === 204) {
       return { success: true, message: "Carrera eliminada correctamente" };
     }
     
     if (res.status === 200) {
-      // Verificar si la respuesta tiene contenido
       const contentLength = res.headers.get('content-length');
       const contentType = res.headers.get('content-type');
       
@@ -120,7 +115,6 @@ export async function deleteCarrera(id) {
       }
     }
 
-    //  Si hay contenido JSON, parsearlo normalmente
     return res.json();
     
   } catch (error) {
@@ -154,20 +148,20 @@ export async function deleteMateria(id) {
 
 // ================== USUARIOS ==================
 export async function getUsuarios() {
-  return request("/usuarios");
+  return request("/api/usuarios"); 
 }
 
 export async function getUsuario(id) {
-  return request(`/usuarios/${id}`);
+  return request(`/api/usuarios/${id}`); 
 }
 
 export async function updateUsuario(id, usuario) {
-  return request(`/usuarios/${id}`, {
+  return request(`/api/usuarios/${id}`, { 
     method: "PUT",
     body: JSON.stringify(usuario),
   });
 }
 
 export async function deleteUsuario(id) {
-  return request(`/usuarios/${id}`, { method: "DELETE" });
+  return request(`/api/usuarios/${id}`, { method: "DELETE" }); 
 }
