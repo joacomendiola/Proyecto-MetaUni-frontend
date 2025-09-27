@@ -28,7 +28,7 @@ export default function Navbar({ darkMode, setDarkMode }) {
             {/* Perfil */}
             <Link to="/perfil" className="user-profile">
               <FaUserCircle size={20} />
-              <span>{user.nombre}</span>
+              <span>{user.nombre || user.email}</span>
             </Link>
 
             <button onClick={logout} className="logout-btn">
