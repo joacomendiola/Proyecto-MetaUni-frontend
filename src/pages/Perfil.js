@@ -7,7 +7,7 @@ import "../index.css";
 
 // ================== PERFIL ==================
 export default function Perfil() {
-  const { user, logout } = useAuth();
+  const { user, logout, updateUser } = useAuth();
 
   // Inputs para edición
   const [editNombre, setEditNombre] = useState(user?.nombre || "");
@@ -31,7 +31,7 @@ export default function Perfil() {
       email: editCorreo
     });
 
-    // ✅ USAR updateUser DEL CONTEXTO EN LUGAR DE MANIPULAR LOCALSTORAGE DIRECTAMENTE
+    //  USAR updateUser DEL CONTEXTO EN LUGAR DE MANIPULAR LOCALSTORAGE DIRECTAMENTE
     updateUser({
       nombre: editNombre,
       email: editCorreo
