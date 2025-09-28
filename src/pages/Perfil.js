@@ -12,37 +12,49 @@ export default function Perfil() {
   // Inputs para edición
   const [editNombre, setEditNombre] = useState(user?.nombre || "");
   const [editCorreo, setEditCorreo] = useState(user?.email || "");
+  const [loading, setLoading] = useState(false);
 
-  // Función async para guardar
+  // Función async para guardar - VERSIÓN SIMPLE QUE FUNCIONA
   const handleSave = async (e) => {
-  e.preventDefault();
+    e.preventDefault();
+    
+    if (loading) return;
+    setLoading(true);
 
-  try {
-    const response = await updateUsuario(user.id, {
-      nombre: editNombre,
-      email: editCorreo
-    });
+    // Validaciones básicas
+    if (editNombre.trim().length < 3) {
+      toast.error("⚠️ El nombre debe tener al menos 3 caracteres");
+      setLoading(false);
+      return;
+    }
+    if (!editCorreo.includes("@")) {
+      toast.error("⚠️ Correo inválido");
+      setLoading(false);
+      return;
+    }
 
-    // VERIFICAR si cambió el email
-    if (response.emailCambiado) {
-      // Si cambió el email, hacer LOGOUT forzado
-      toast.success("✅ Email actualizado. Por favor vuelve a iniciar sesión");
-      setTimeout(() => {
-        logout(); // Cerrar sesión
-      }, 2000);
-    } else {
-      // Si solo cambió el nombre, actualizar normal
+    try {
+      // Llamar al backend para actualizar
+      await updateUsuario(user.id, {
+        nombre: editNombre,
+        email: editCorreo
+      });
+
+      // ✅ ACTUALIZACIÓN INMEDIATA - Sin verificación compleja
       updateUser({
         nombre: editNombre,
         email: editCorreo
       });
+      
       toast.success("✅ Perfil actualizado correctamente");
-    }
 
-  } catch (err) {
-    toast.error("❌ Error al actualizar el perfil");
-  }
-};
+    } catch (err) {
+      console.error("❌ Error actualizando perfil:", err);
+      toast.error("❌ Error al actualizar el perfil");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="card">
@@ -56,6 +68,7 @@ export default function Perfil() {
             value={editNombre}
             onChange={(e) => setEditNombre(e.target.value)}
             placeholder="Nombre completo"
+            disabled={loading}
           />
         </div>
 
@@ -66,11 +79,16 @@ export default function Perfil() {
             value={editCorreo}
             onChange={(e) => setEditCorreo(e.target.value)}
             placeholder="Correo electrónico"
+            disabled={loading}
           />
         </div>
 
-        <button type="submit" className="btn">
-          Guardar cambios
+        <button 
+          type="submit" 
+          className="btn"
+          disabled={loading}
+        >
+          {loading ? "Guardando..." : "Guardar cambios"}
         </button>
       </form>
 
@@ -80,6 +98,7 @@ export default function Perfil() {
         onClick={logout}
         className="btn"
         style={{ background: "#ef4444" }}
+        disabled={loading}
       >
         Cerrar sesión
       </button>
