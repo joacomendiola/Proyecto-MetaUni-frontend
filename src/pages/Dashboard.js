@@ -72,20 +72,27 @@ export default function Dashboard() {
 
   // ================== ELIMINAR CARRERA ==================
   const handleEliminarConfirmado = async () => {
-    if (!carreraAEliminar) return;
+  if (!carreraAEliminar) return;
 
-    try {
-      await deleteCarrera(carreraAEliminar.id);
-      setCarreras((prev) =>
-        prev.filter((c) => c.id !== carreraAEliminar.id)
-      );
+  try {
+    const result = await deleteCarrera(carreraAEliminar.id);
+    
+    
+    if (result === true || result?.success) {
+      setCarreras((prev) => prev.filter((c) => c.id !== carreraAEliminar.id));
       toast.success(`🗑️ Carrera "${carreraAEliminar.nombre}" eliminada`);
-      setCarreraAEliminar(null);
-    } catch (err) {
-      console.error("❌ Error eliminando carrera:", err);
-      toast.error("Error al eliminar carrera");
+    } else {
+      // Si el backend devuelve un mensaje
+      toast.success(result?.message || "Carrera eliminada");
+      setCarreras((prev) => prev.filter((c) => c.id !== carreraAEliminar.id));
     }
-  };
+    
+    setCarreraAEliminar(null);
+  } catch (err) {
+    console.error("❌ Error eliminando carrera:", err);
+    toast.error("Error al eliminar carrera");
+  }
+};
 
   return (
     <div className="dashboard" style={{ padding: "20px" }}>

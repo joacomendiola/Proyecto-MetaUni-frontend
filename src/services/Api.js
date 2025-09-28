@@ -47,6 +47,13 @@ async function request(endpoint, options = {}) {
   }
 }
 
+// Y deleteCarrera simple:
+export async function deleteCarrera(id) {
+  return request(`/api/carreras/${id}`, { 
+    method: "DELETE" 
+  });
+}
+
 // ================== AUTH ==================
 export async function login(email, password) {
   return request("/api/auth/login", { 
