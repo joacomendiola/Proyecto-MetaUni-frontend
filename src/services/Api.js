@@ -85,42 +85,9 @@ export async function updateCarrera(id, carrera) {
 }
 
 export async function deleteCarrera(id) {
-  try {
-    const token = JSON.parse(localStorage.getItem("user"))?.token;
-    
-    const res = await fetch(`${API_URL}/api/carreras/${id}`, { 
-      method: "DELETE",
-      headers: {
-        "Authorization": `Bearer ${token || ""}`,
-        "Content-Type": "application/json"
-      }
-    });
-
-    console.log("🔍 Delete carrera response status:", res.status, res.statusText);
-
-    if (res.status === 401) throw new Error("No autorizado");
-    if (res.status === 403) throw new Error("Acceso prohibido");
-    if (!res.ok) throw new Error(`Error HTTP: ${res.status}`);
-
-    if (res.status === 204) {
-      return { success: true, message: "Carrera eliminada correctamente" };
-    }
-    
-    if (res.status === 200) {
-      const contentLength = res.headers.get('content-length');
-      const contentType = res.headers.get('content-type');
-      
-      if (contentLength === '0' || !contentLength || !contentType?.includes('application/json')) {
-        return { success: true, message: "Carrera eliminada correctamente" };
-      }
-    }
-
-    return res.json();
-    
-  } catch (error) {
-    console.error("❌ Error eliminando carrera:", error);
-    throw error;
-  }
+  return request(`/api/carreras/${id}`, { 
+    method: "DELETE" 
+  });
 }
 
 // ================== MATERIAS ==================
