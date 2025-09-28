@@ -28,7 +28,7 @@ async function request(endpoint, options = {}) {
 
   console.log("🔍 Headers Authorization:", headers.Authorization ? "PRESENTE" : "FALTANTE");
 
-   try {
+  try {
     const res = await fetch(`${API_URL}${endpoint}`, { ...options, headers });
 
     console.log("🔍 Response status:", res.status, res.statusText);
@@ -37,22 +37,8 @@ async function request(endpoint, options = {}) {
     if (res.status === 403) throw new Error("Acceso prohibido");
     if (!res.ok) throw new Error(`Error HTTP: ${res.status}`);
 
-    //  VERIFICAR ANTES DE PARSEAR
-    const contentLength = res.headers.get('content-length');
-    const contentType = res.headers.get('content-type');
     
-    // Si no hay contenido, devolver éxito directamente
-    if (res.status === 204 || contentLength === '0' || !contentLength) {
-      return { success: true, message: "Operación exitosa" };
-    }
-    
-    // Si hay contenido pero no es JSON, devolver texto
-    if (!contentType?.includes('application/json')) {
-      const text = await res.text();
-      return { success: true, message: text || "Operación exitosa" };
-    }
-
-    // Solo si es JSON, parsearlo
+    if (res.status === 204) return true;
     return res.json();
 
   } catch (error) {
