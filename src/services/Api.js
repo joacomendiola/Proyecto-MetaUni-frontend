@@ -37,7 +37,18 @@ async function request(endpoint, options = {}) {
     if (res.status === 403) throw new Error("Acceso prohibido");
     if (!res.ok) throw new Error(`Error HTTP: ${res.status}`);
 
-    if (res.status === 204) return true;
+    // MANEJO CORRECTO DE RESPUESTAS VACÍAS
+    if (res.status === 204 || res.status === 200) {
+      const contentLength = res.headers.get('content-length');
+      const contentType = res.headers.get('content-type');
+      
+      // Si no hay contenido o no es JSON, devolver éxito
+      if (contentLength === '0' || !contentLength || !contentType?.includes('application/json')) {
+        return { success: true, message: "Operación exitosa" };
+      }
+    }
+
+    // Si hay contenido JSON, parsearlo
     return res.json();
 
   } catch (error) {

@@ -108,15 +108,9 @@ export default function Dashboard() {
 
             return (
               <div
-                key={c.id}
-                style={{
-                  marginBottom: "15px",
-                  padding: "15px",
-                  borderRadius: "10px",
-                  background: "#f9f9f9",
-                  border: "1px solid #ddd",
-                }}
-              >
+  key={c.id}
+  className="career-card-modern"  
+>
                 <div
                   className="card-header"
                   style={{
