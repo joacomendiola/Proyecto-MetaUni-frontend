@@ -1,9 +1,9 @@
 // ================== IMPORTS ==================
 import React, { useState } from "react";
 import { toast } from "react-toastify";
-import { useAuth } from "../context/AuthContext";
-import { updateUsuario } from "../services/Api"; 
-import "../index.css";
+import { useAuth } from '../../context/AuthContext';
+import { updateUsuario } from "../../services/api"; 
+import "../../index.css";
 
 // ================== PERFIL ==================
 export default function Perfil() {

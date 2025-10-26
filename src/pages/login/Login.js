@@ -3,9 +3,9 @@ import React, { useState } from "react";
 import { FaUserAlt, FaLock } from "react-icons/fa";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 import { toast } from "react-toastify";
-import { login as loginApi } from "../services/Api";   
-import { useAuth } from "../context/AuthContext";
-import "../index.css";
+import { login as loginApi } from "../../services/api";   
+import { useAuth } from "../../context/AuthContext";
+import "../../index.css";
 
 // ================== LOGIN ==================
 export default function Login() {

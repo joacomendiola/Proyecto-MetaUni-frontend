@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import SelectorColor from "../components/SelectorColor";
-import { createCarrera } from "../services/Api";
+import SelectorColor from "../../components/common/SelectorColor";
+import { createCarrera } from "../../services/api";
 import { toast } from "react-toastify";
 
 export default function CrearCarrera({ onCarreraCreada }) {

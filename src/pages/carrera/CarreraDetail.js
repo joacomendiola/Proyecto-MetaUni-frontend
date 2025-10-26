@@ -1,17 +1,17 @@
 // ================== IMPORTS ==================
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import LoadingSpinner from "../components/LoadingSpinner";
+import LoadingSpinner from "../../components/common/LoadingSpinner";
 import {
   getMateriasByCarrera,
   createMateriaInCarrera,
   updateMateria,
   deleteMateria,
-} from "../services/Api";
+} from "../../services/api";
 import { toast } from "react-toastify";
 import { FaTrash } from "react-icons/fa";
 import { motion, AnimatePresence } from "framer-motion"; // 🔹 animación
-import "../index.css";
+import "../../index.css";
 
 // ================== DETALLE DE CARRERA ==================
 export default function CarreraDetail() {

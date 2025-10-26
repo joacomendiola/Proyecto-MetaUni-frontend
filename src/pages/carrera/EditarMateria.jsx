@@ -1,6 +1,6 @@
 // ================== IMPORTS ==================
 import React, { useState } from "react";
-import { updateMateria, deleteMateria } from "../services/Api";
+import { updateMateria, deleteMateria } from "../../services/api";
 import { toast } from "react-toastify";
 
 // ================== COMPONENTE ==================

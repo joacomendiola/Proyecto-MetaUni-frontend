@@ -3,8 +3,8 @@ import React, { useState } from "react";
 import { FaUserAlt, FaLock, FaEnvelope } from "react-icons/fa";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 import { toast } from "react-toastify";
-import { register as registerApi } from "../services/Api"; 
-import "../index.css";
+import { register as registerApi } from "../../services/api"; 
+import "../../index.css";
 
 // ================== REGISTRO ==================
 export default function Register() {

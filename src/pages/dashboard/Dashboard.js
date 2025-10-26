@@ -1,13 +1,13 @@
 // ================== IMPORTS ==================
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { getCarreras, updateCarrera, deleteCarrera } from "../services/Api";
-import { useAuth } from "../context/AuthContext";
+import { getCarreras, updateCarrera, deleteCarrera } from "../../services/api";
+import { useAuth } from "../../context/AuthContext";
 import { toast } from "react-toastify";
-import CrearCarrera from "./CrearCarrera";
+import CrearCarrera from '../carrera/CrearCarrera';
 import { FaPaintBrush, FaTrash } from "react-icons/fa";
 import { motion, AnimatePresence } from "framer-motion"; // 🔹 animaciones
-import "../index.css";
+import "../../index.css";
 
 // ================== DASHBOARD ==================
 export default function Dashboard() {
