@@ -1,0 +1,54 @@
+// ================== IMPORTS ==================
+import React from "react";
+import { Link } from "react-router-dom";
+import { FaSun, FaMoon, FaUserCircle } from "react-icons/fa";
+import { useAuth } from "../../context/AuthContext";
+import "../../index.css";
+import Logo from "../../assets/logo.png";
+
+// ================== NAVBAR ==================
+export default function Navbar({ darkMode, setDarkMode }) {
+  const { user, logout } = useAuth();
+
+  return (
+    <nav className="navbar">
+      <Link to="/" className="logo-link">
+        {/* Usamos el Link con la clase "logo" para contener la imagen y el texto */}
+    <Link to="/" className="logo-link"> {/* Usaremos la clase 'logo-link' para estilos */}
+      <img src={Logo} alt="MetaUni Logo" className="logo-img-small" />
+      <span className="logo-text">MetaUni</span> {/* ¡Cambiamos <h1> por <span>! */}
+    </Link>
+      </Link>
+      <div className="nav-links">
+        {!user ? (
+          <>
+            <Link to="/iniciar-sesion">Iniciar Sesión</Link>
+            <Link to="/registrarse">Registrarse</Link>
+          </>
+        ) : (
+          <>
+            <Link to="/panel">Panel</Link>
+            {user.rol === "ROLE_ADMIN" && (
+              <Link to="/admin">Administrar usuarios</Link>
+            )}
+
+            {/* Perfil */}
+            <Link to="/perfil" className="user-profile">
+              <FaUserCircle size={20} />
+              <span>{user.nombre || user.email}</span>
+            </Link>
+
+            <button onClick={logout} className="logout-btn">
+              Cerrar sesión
+            </button>
+          </>
+        )}
+
+        {/* Toggle tema */}
+        <button className="theme-toggle" onClick={() => setDarkMode(!darkMode)}>
+          {darkMode ? <FaSun /> : <FaMoon />}
+        </button>
+      </div>
+    </nav>
+  );
+}
