@@ -679,3 +679,27 @@ a.btn:hover {
   --card-bg: #1e1b4b;
   --border-color: #3730a3;
 }
+
+/* ================== LOGO Y TEXTO ================== */
+
+/* 1. Contenedor del Link  */
+.logo-link {
+    display: flex;       
+    align-items: center; 
+    gap: 10px;            
+    color: white;        
+    text-decoration: none; 
+}
+
+/* 2. Estilo del texto MetaUni  */
+.logo-text {
+    font-size: 20px; 
+    font-weight: 700; 
+    /* El color ya lo toma del .logo-link (white) */
+}
+
+/* 3. Estilo para la imagen */
+.logo-img-small {
+    height: 45px; 
+    width: auto;
+}

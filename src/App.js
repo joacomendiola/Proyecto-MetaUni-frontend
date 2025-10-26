@@ -5,17 +5,17 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 // Contexto de auth
-import { AuthProvider } from "./context/AuthContext";
+import { AuthProvider } from './context/AuthContext';
 
 // Componentes principales
-import Navbar from "./components/Navbar";
-import Login from "./pages/Login";
-import Register from "./pages/Register";
-import Dashboard from "./pages/Dashboard";
-import CarreraDetail from "./pages/CarreraDetail";
-import RutaProtegida from "./components/RutaProtegida";
-import AdminPage from "./pages/AdminPage";
-import Perfil from "./pages/Perfil";
+import Navbar from "./components/common/Navbar";
+import Login from "./pages/login/Login";
+import Register from "./pages/register/Register";
+import Dashboard from "./pages/dashboard/Dashboard";
+import CarreraDetail from "./pages/carrera/CarreraDetail";
+import RutaProtegida from "./components/features/rutas/RutaProtegida";
+import AdminPage from "./pages/admin/AdminPage";
+import Perfil from "./pages/perfil/Perfil";
 
 // ================== COMPONENTE PRINCIPAL ==================
 function AppContent() {
