@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { FaUserAlt, FaLock } from "react-icons/fa";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 import { login as loginApi } from "../../services/api";   
 import { useAuth } from "../../context/AuthContext";
 import "../../index.css";
@@ -13,37 +14,33 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const { login } = useAuth();
+  const navigate = useNavigate();
 
   const handleLogin = async (e) => {
-  e.preventDefault();
-  console.log("👉 Enviando datos LOGIN:", { email, password });
+    e.preventDefault();
 
-  try {
-    const data = await loginApi(email, password);
-    console.log("✅ Respuesta COMPLETA del backend:", JSON.stringify(data, null, 2)); 
+    try {
+      const data = await loginApi(email, password);
 
-    if (data.token) {
-      // GUARDAR INMEDIATAMENTE en localStorage
-      const userData = {
-        id: data.id,           
-        email: data.email,
-        rol: data.rol || "ROLE_USER",
-        token: data.token,
-        nombre: data.nombre || ''
-      };
-      
-      console.log("🔍 UserData a guardar:", userData); // Verificar que tenga ID
-      localStorage.setItem("user", JSON.stringify(userData));
-      login(userData);
-      toast.success("✅ Inicio de sesión exitoso!");
-    } else {
-      throw new Error("Credenciales inválidas");
+      if (data.token) {
+        const userData = {
+          id: data.id,           
+          email: data.email,
+          rol: data.rol || "ROLE_USER",
+          token: data.token,
+          nombre: data.nombre || ''
+        };
+        login(userData);
+        toast.success("✅ Inicio de sesión exitoso!");
+        navigate("/panel");
+      } else {
+        throw new Error("Credenciales inválidas");
+      }
+    } catch (err) {
+      console.error("❌ Error en LOGIN:", err);
+      toast.error("❌ " + err.message);
     }
-  } catch (err) {
-    console.error("❌ Error en LOGIN:", err);
-    toast.error("❌ " + err.message);
-  }
-};
+  };
 
   return (
     <div className="card">

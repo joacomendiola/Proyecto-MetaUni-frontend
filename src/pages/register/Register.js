@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { FaUserAlt, FaLock, FaEnvelope } from "react-icons/fa";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 import { register as registerApi } from "../../services/api"; 
 import "../../index.css";
 
@@ -12,11 +13,11 @@ export default function Register() {
   const [nombre, setNombre] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
   // Manejo del registro con validaciones
   const handleRegister = async (e) => {
     e.preventDefault();
-    console.log("👉 Enviando datos de registro:", { nombre, email, password });
 
     if (nombre.trim().length < 3) {
       return toast.error("⚠️ El nombre debe tener al menos 3 caracteres");
@@ -35,10 +36,9 @@ export default function Register() {
         password,
       });
 
-      console.log("✅ Respuesta del backend REGISTER:", data);
-
       if (data.id || data.email) {
         toast.success("✅ Registro exitoso! Ahora inicia sesión.");
+        navigate("/iniciar-sesion");
       } else {
         throw new Error("Error al registrar usuario");
       }

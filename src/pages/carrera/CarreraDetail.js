@@ -10,7 +10,7 @@ import {
 } from "../../services/api";
 import { toast } from "react-toastify";
 import { FaTrash } from "react-icons/fa";
-import { motion, AnimatePresence } from "framer-motion"; // 🔹 animación
+import { motion, AnimatePresence } from "framer-motion";
 import "../../index.css";
 
 // ================== DETALLE DE CARRERA ==================
@@ -18,13 +18,19 @@ export default function CarreraDetail() {
   const { id } = useParams();
 
   const [materias, setMaterias] = useState([]);
+  const [notasEditadas, setNotasEditadas] = useState({});
   const [loading, setLoading] = useState(true);
   const [nuevaMateria, setNuevaMateria] = useState("");
   const [materiaAEliminar, setMateriaAEliminar] = useState(null);
 
   useEffect(() => {
     getMateriasByCarrera(id)
-      .then(setMaterias)
+      .then((data) => {
+        setMaterias(data);
+        const notasIniciales = {};
+        data.forEach((m) => { notasIniciales[m.id] = m.notaFinal || 0; });
+        setNotasEditadas(notasIniciales);
+      })
       .catch((err) => console.error("⚠️ Error al obtener materias:", err))
       .finally(() => setLoading(false));
   }, [id]);
@@ -38,6 +44,7 @@ export default function CarreraDetail() {
         notaFinal: 0,
       });
       setMaterias([...materias, materia]);
+      setNotasEditadas((prev) => ({ ...prev, [materia.id]: materia.notaFinal || 0 }));
       setNuevaMateria("");
       toast.success("✅ Materia creada con éxito");
     } catch (err) {
@@ -47,7 +54,8 @@ export default function CarreraDetail() {
   }
 
   // ================== ACTUALIZAR NOTA ==================
-  async function handleActualizarNota(materia, nuevaNota) {
+  async function handleActualizarNota(materia) {
+    const nuevaNota = notasEditadas[materia.id];
     try {
       const actualizada = await updateMateria(materia.id, {
         ...materia,
@@ -139,8 +147,11 @@ export default function CarreraDetail() {
               min="0"
               max="10"
               step="0.1"
-              defaultValue={m.notaFinal || 0}
-              onBlur={(e) => handleActualizarNota(m, e.target.value)}
+              value={notasEditadas[m.id] ?? m.notaFinal ?? 0}
+              onChange={(e) =>
+                setNotasEditadas((prev) => ({ ...prev, [m.id]: e.target.value }))
+              }
+              onBlur={() => handleActualizarNota(m)}
             />
             <small>Editar nota y salir del input para guardar</small>
           </div>

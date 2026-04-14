@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 
 export default function CrearCarrera({ onCarreraCreada }) {
   const [nombre, setNombre] = useState("");
-  const [colorBarra, setColorBarra] = useState("violeta");
+  const [colorBarra, setColorBarra] = useState("#6366f1");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
