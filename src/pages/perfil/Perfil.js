@@ -35,16 +35,20 @@ export default function Perfil() {
 
     try {
       // Llamar al backend para actualizar
-      await updateUsuario(user.id, {
+      const response = await updateUsuario(user.id, {
         nombre: editNombre,
         email: editCorreo
       });
 
-      // ✅ ACTUALIZACIÓN INMEDIATA - Sin verificación compleja
-      updateUser({
+      // Si el backend devolvió un nuevo token (cuando cambia el email), guardarlo también
+      const updatedData = {
         nombre: editNombre,
-        email: editCorreo
-      });
+        email: editCorreo,
+        ...(response?.token && { token: response.token }),
+      };
+
+      // ✅ ACTUALIZACIÓN INMEDIATA - Sin verificación compleja
+      updateUser(updatedData);
       
       toast.success("✅ Perfil actualizado correctamente");
 
