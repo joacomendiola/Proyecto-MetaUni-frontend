@@ -13,11 +13,8 @@ export default function Navbar({ darkMode, setDarkMode }) {
   return (
     <nav className="navbar">
       <Link to="/" className="logo-link">
-        {/* Usamos el Link con la clase "logo" para contener la imagen y el texto */}
-    <Link to="/" className="logo-link"> {/* Usaremos la clase 'logo-link' para estilos */}
-      <img src={Logo} alt="MetaUni Logo" className="logo-img-small" />
-      <span className="logo-text">MetaUni</span> {/* ¡Cambiamos <h1> por <span>! */}
-    </Link>
+        <img src={Logo} alt="MetaUni Logo" className="logo-img-small" />
+        <span className="logo-text">MetaUni</span>
       </Link>
       <div className="nav-links">
         {!user ? (
