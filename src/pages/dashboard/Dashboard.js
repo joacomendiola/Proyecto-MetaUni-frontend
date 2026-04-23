@@ -162,12 +162,14 @@ export default function Dashboard() {
                   onClick={() => navigate(`/carrera/${c.id}`)}
                   style={{
                     marginTop: "10px",
-                    padding: "8px 12px",
+                    padding: "8px 14px",
                     border: "none",
-                    borderRadius: "6px",
-                    background: "#6366f1",
+                    borderRadius: "8px",
+                    background: "var(--accent-color)",
                     color: "white",
                     cursor: "pointer",
+                    fontWeight: "600",
+                    fontSize: "13px",
                   }}
                 >
                   Ver Materias
@@ -238,11 +240,14 @@ export default function Dashboard() {
               exit={{ opacity: 0, scale: 0.8 }}
               transition={{ duration: 0.3 }}
               style={{
-                background: "white",
+                background: "var(--card-bg)",
+                color: "var(--text-primary)",
                 padding: "30px",
                 borderRadius: "12px",
                 width: "400px",
+                maxWidth: "calc(100vw - 40px)",
                 textAlign: "center",
+                border: "1px solid var(--border-color)",
               }}
             >
               <h3>¿Eliminar carrera?</h3>
