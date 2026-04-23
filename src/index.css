@@ -7,8 +7,8 @@
 
 body {
   font-family: 'Inter', sans-serif;
-  background-color: #f9fafb;
-  color: #111827;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -25,21 +25,23 @@ body, .card, .navbar, .btn, .input-group input, .career-card {
 /* ================================================================= */
 /* ================== LOGIN & REGISTER (CARD) ================== */
 .card {
-  background: white;
+  background: var(--card-bg);
   padding: 40px;
-  border-radius: 16px;
+  border-radius: var(--radius-md);
   width: 100%;
   max-width: 400px;
   margin-top: 60px;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-sm);
 }
 
 .card h2 {
   text-align: center;
   margin-bottom: 28px;
-  font-size: 1.6rem;
-  font-weight: 600;
-  color: #1f2937;
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
 }
 
 /* ================== INPUTS ================== */
@@ -52,18 +54,19 @@ body, .card, .navbar, .btn, .input-group input, .career-card {
   width: 100%;
   height: 44px;              
   padding: 0 44px;           
-  border-radius: 10px;
-  border: 1px solid #d1d5db;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-color);
   font-size: 15px;
   outline: none;
-  background: #f9fafb;
+  background: var(--bg-secondary);
+  color: var(--text-primary);
   line-height: 1.4;          
 }
 
 .input-group input:focus {
-  border-color: #4f46e5;
-  background: white;
-  box-shadow: 0 0 0 3px rgba(79,70,229,0.2);
+  border-color: var(--accent-color);
+  background: var(--bg-secondary);
+  box-shadow: 0 0 0 3px rgba(79,70,229,0.15);
 }
 
 .input-group input::placeholder {
@@ -100,41 +103,44 @@ input::-ms-clear { display: none !important; }
 a.btn {
   display: inline-block;
   width: 100%;
-  padding: 14px;
-  background: linear-gradient(to right, #6366f1, #4f46e5);
+  padding: 13px;
+  background: var(--accent-color);
   color: white !important;
   border: none;
-  border-radius: 10px;
+  border-radius: var(--radius-sm);
   font-weight: 600;
   font-size: 15px;
+  letter-spacing: 0.01em;
   cursor: pointer;
   text-decoration: none;
   text-align: center;
-  transition: transform 0.15s ease, box-shadow 0.2s;
+  transition: background-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .btn:hover,
 a.btn:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 4px 14px rgba(79,70,229,0.3);
+  background: var(--accent-hover);
+  box-shadow: var(--shadow-md);
 }
 
 /* ================================================================= */
 /* ================== NAVBAR ================== */
 .navbar {
   width: 100%;
-  background: #4f46e5;
-  padding: 15px 40px;
+  background: var(--card-bg);
+  padding: 12px 40px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  color: white;
+  color: var(--text-primary);
   font-weight: 600;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  border-bottom: 1px solid var(--border-color);
+  box-shadow: none;
   position: fixed;
   top: 0;
   left: 0;
   z-index: 1000;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
 .logo { 
@@ -150,17 +156,19 @@ a.btn:hover {
 
 /*  Links de navegación */
 .nav-links a {
-  color: white;
+  color: var(--text-secondary);
   text-decoration: none;
   font-weight: 500;
-  display: flex;         /* se comportan igual que el botón */
+  font-size: 14px;
+  display: flex;
   align-items: center;
   height: 100%;
-  transition: opacity 0.2s;
+  transition: color 0.2s;
 }
 
 .nav-links a:hover { 
-  opacity: 0.8; 
+  color: var(--text-primary);
+  opacity: 1;
 }
 
 /*  Botón de toggle (sol/luna) */
@@ -168,16 +176,16 @@ a.btn:hover {
   background: none;
   border: none;
   cursor: pointer;
-  font-size: 20px;       /* mismo tamaño que el texto */
-  color: inherit;
+  font-size: 18px;
+  color: var(--text-secondary);
   display: flex;
   align-items: center;
   height: 100%;
-  transition: opacity 0.2s;
+  transition: color 0.2s;
 }
 
 .theme-toggle:hover {
-  opacity: 0.8;
+  color: var(--text-primary);
 }
 
 /* ================================================================= */
@@ -200,22 +208,27 @@ a.btn:hover {
 /* Contenedor de tarjetas de carrera */
 .careers-container {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
-  gap: 24px;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
 }
 
 /* Tarjeta individual de carrera */
 .career-card {
-  background: white;
-  border-radius: 12px;
-  padding: 30px;
+  background: var(--card-bg);
+  border-radius: var(--radius-md);
+  padding: 24px;
   min-height: 160px;
-  min-width: 500px;
-  box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-sm);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   position: relative;
+  transition: box-shadow 0.2s ease;
+}
+
+.career-card:hover {
+  box-shadow: var(--shadow-md);
 }
 
 .career-card h3 {
@@ -228,23 +241,24 @@ a.btn:hover {
 /* Barra de progreso */
 .progress-bar {
   width: 100%;
-  height: 10px;
-  background: #e5e7eb;
-  border-radius: 8px;
+  height: 6px;
+  background: var(--border-color);
+  border-radius: 999px;
   margin-bottom: 8px;
   overflow: hidden;
 }
 
 .progress {
   height: 100%;
-  background: linear-gradient(to right, #6366f1, #4f46e5);
-  border-radius: 8px;
+  background: var(--accent-color);
+  border-radius: 999px;
+  transition: width 0.4s ease;
 }
 
 .career-card p {
   font-size: 14px;
-  color: #4b5563;
-  margin-bottom: 14px;
+  color: var(--text-secondary);
+  margin-bottom: 12px;
 }
 
 .career-card .btn {
@@ -253,7 +267,7 @@ a.btn:hover {
   width: auto;
 }
 
-.dark-mode .career-card p { color: #d1d5db; }
+.dark-mode .career-card p { color: var(--text-secondary); }
 
 /* ================================================================= */
 /* ================== PALETA DE COLORES ================== */
@@ -284,16 +298,20 @@ a.btn:hover {
   right: 0;
   display: flex;
   gap: 6px;
-  background: white;
-  padding: 6px 8px;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  background: var(--card-bg);
+  padding: 8px 10px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-md);
   z-index: 10;
+  flex-wrap: wrap;
+  max-width: 200px;
 }
 
 .dark-mode .palette-popup {
-  background: #1f2937;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.6);
+  background: var(--card-bg);
+  border-color: var(--border-color);
+  box-shadow: var(--shadow-md);
 }
 
 /* Botones de color */
@@ -311,15 +329,28 @@ a.btn:hover {
 
 /* ================================================================= */
 /* ================== DARK MODE GENERAL ================== */
-.dark-mode { background-color: #0f172a; color: #f9fafb; }
-.dark-mode .navbar { background: #4f46e5; }
+.dark-mode { background-color: var(--bg-primary); color: var(--text-primary); }
+.dark-mode .navbar { 
+  background: #312e81; 
+  border-bottom-color: #3730a3;
+  color: #f9fafb;
+}
+.dark-mode .navbar .nav-links a,
+.dark-mode .navbar .theme-toggle {
+  color: rgba(255,255,255,0.8);
+}
+.dark-mode .navbar .nav-links a:hover,
+.dark-mode .navbar .theme-toggle:hover {
+  color: #ffffff;
+}
 
 .dark-mode .card,
 .dark-mode .career-card,
 .dark-mode .materia-card {
-  background: #1e1b4b;
-  color: #f9fafb;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+  background: var(--card-bg);
+  color: var(--text-primary);
+  border-color: var(--border-color);
+  box-shadow: var(--shadow-sm);
 }
 
 .dark-mode h1,
@@ -331,20 +362,20 @@ a.btn:hover {
 .dark-mode label,
 .dark-mode input,
 .dark-mode button {
-  color: #f9fafb !important;
+  color: var(--text-primary) !important;
 }
 
 .dark-mode .input-group input {
-  background: #1e293b;
-  border: 1px solid #475569;
-  color: #f9fafb;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
 }
 
-.dark-mode .progress-bar { background: #334155; }
+.dark-mode .progress-bar { background: var(--border-color); }
 
 .dark-mode .btn,
 .dark-mode a.btn {
-  background: linear-gradient(to right, #7c3aed, #4f46e5);
+  background: var(--accent-color);
   color: white !important;
 }
 
@@ -366,23 +397,24 @@ a.btn:hover {
 }
 
 .materia-card {
-  background: white;
+  background: var(--card-bg);
   padding: 20px;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-sm);
   text-align: left;
-  transition: background-color 0.3s ease, color 0.3s ease;
+  transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.2s ease;
 }
 
 .materia-card h3 {
-  font-size: 1.1rem;
+  font-size: 1.05rem;
   font-weight: 600;
   margin-bottom: 8px;
-  color: #4f46e5;
+  color: var(--accent-color);
 }
 
-.materia-card p { font-size: 14px; color: #374151; }
-.materia-card span { font-weight: 600; color: #111827; }
+.materia-card p { font-size: 14px; color: var(--text-secondary); }
+.materia-card span { font-weight: 600; color: var(--text-primary); }
 
 .promedio {
   font-size: 1.2rem;
@@ -392,10 +424,10 @@ a.btn:hover {
 }
 
 /* Dark mode de materias */
-.dark-mode .materia-card { background: #1f2937; color: #f9fafb; }
-.dark-mode .materia-card h3 { color: #a78bfa; }
+.dark-mode .materia-card { background: var(--card-bg); color: var(--text-primary); border-color: var(--border-color); }
+.dark-mode .materia-card h3 { color: var(--accent-color); }
 .dark-mode .materia-card p,
-.dark-mode .materia-card span { color: #f9fafb; }
+.dark-mode .materia-card span { color: var(--text-primary); }
 
 .career-title {
   text-align: center;
@@ -479,40 +511,41 @@ a.btn:hover {
   display: flex;
   align-items: center;
   gap: 8px;
-  color: white;
+  color: var(--text-secondary);
   font-size: 14px;
   font-weight: 500;
 }
 
 .user-profile span {
-  margin-right: 6px;
+  margin-right: 4px;
 }
 
 .logout-btn {
   background: transparent;
   border: none;
-  color: #f87171; /* rojo suave */
+  color: #ef4444;
   cursor: pointer;
   font-size: 14px;
-  padding: 2px 6px;
-  border-radius: 6px;
+  padding: 4px 8px;
+  border-radius: var(--radius-sm);
+  font-weight: 500;
   transition: background 0.2s, color 0.2s;
 }
 
 .logout-btn:hover {
-  background: rgba(248, 113, 113, 0.15); /* fondo rojo muy suave */
-  color: #ef4444; /* rojo más fuerte */
+  background: rgba(239, 68, 68, 0.08);
+  color: #dc2626;
 }
 
 
 /* ================== FORMULARIO CREAR CARRERA ================== */
 .crear-carrera-form {
   background: var(--card-bg);
-  padding: 30px;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  padding: 28px;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
   max-width: 450px;
-  margin: 40px auto;
+  margin: 32px auto;
   border: 1px solid var(--border-color);
 }
 
@@ -524,19 +557,21 @@ a.btn:hover {
 
 .crear-carrera-input {
   width: 100%;
-  padding: 12px;
-  margin: 10px 0;
-  border-radius: 8px;
+  padding: 11px 14px;
+  margin: 8px 0;
+  border-radius: var(--radius-sm);
   border: 1px solid var(--border-color);
   background: var(--bg-secondary);
   color: var(--text-primary);
   font-size: 15px;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
 }
 
 .crear-carrera-input:focus {
   outline: none;
   border-color: var(--accent-color);
-  box-shadow: 0 0 0 3px rgba(79,70,229,0.2);
+  box-shadow: 0 0 0 3px rgba(79,70,229,0.15);
 }
 
 .crear-carrera-label {
@@ -547,32 +582,39 @@ a.btn:hover {
 }
 
 .crear-carrera-btn {
-  margin-top: 20px;
+  margin-top: 16px;
   width: 100%;
-  padding: 14px;
-  background: linear-gradient(to right, #6366f1, #4f46e5);
+  padding: 13px;
+  background: var(--accent-color);
   color: white;
   border: none;
-  border-radius: 8px;
+  border-radius: var(--radius-sm);
   cursor: pointer;
   font-weight: 600;
   font-size: 15px;
-  transition: transform 0.15s ease;
+  letter-spacing: 0.01em;
+  transition: background-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .crear-carrera-btn:hover {
-  transform: translateY(-1px);
+  background: var(--accent-hover);
+  box-shadow: var(--shadow-md);
 }
 
 /* ================== TARJETAS DE CARRERA MEJORADAS ================== */
 .career-card-modern {
   background: var(--card-bg);
-  border-radius: 12px;
+  border-radius: var(--radius-md);
   padding: 20px;
-  margin-bottom: 20px;
+  margin-bottom: 16px;
   border: 1px solid var(--border-color);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  box-shadow: var(--shadow-sm);
   position: relative;
+  transition: box-shadow 0.2s ease;
+}
+
+.career-card-modern:hover {
+  box-shadow: var(--shadow-md);
 }
 
 .career-card-modern h3 {
@@ -622,11 +664,14 @@ a.btn:hover {
 
 .modal-content {
   background: var(--card-bg);
-  padding: 30px;
-  border-radius: 12px;
-  width: 400px;
+  color: var(--text-primary);
+  padding: 28px;
+  border-radius: var(--radius-md);
+  width: 380px;
+  max-width: calc(100vw - 40px);
   text-align: center;
   border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-md);
 }
 
 .modal-buttons {
@@ -639,14 +684,15 @@ a.btn:hover {
 .modal-btn {
   padding: 10px 20px;
   border: none;
-  border-radius: 8px;
+  border-radius: var(--radius-sm);
   cursor: pointer;
   font-weight: 600;
-  transition: transform 0.15s ease;
+  font-size: 14px;
+  transition: filter 0.15s ease;
 }
 
 .modal-btn:hover {
-  transform: translateY(-1px);
+  filter: brightness(0.9);
 }
 
 .modal-btn-cancel {
@@ -661,23 +707,31 @@ a.btn:hover {
 
 /* ================== VARIABLES CSS PARA TEMAS ================== */
 :root {
-  --bg-primary: #f9fafb;
+  --bg-primary: #f8fafc;
   --bg-secondary: #ffffff;
-  --text-primary: #111827;
-  --text-secondary: #6b7280;
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
   --accent-color: #4f46e5;
+  --accent-hover: #4338ca;
   --card-bg: #ffffff;
-  --border-color: #e5e7eb;
+  --border-color: #e2e8f0;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.04);
+  --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.07), 0 2px 4px -1px rgba(0,0,0,0.04);
+  --radius-sm: 8px;
+  --radius-md: 12px;
 }
 
 .dark-mode {
   --bg-primary: #0f172a;
   --bg-secondary: #1e293b;
   --text-primary: #f9fafb;
-  --text-secondary: #d1d5db;
-  --accent-color: #a78bfa;
+  --text-secondary: #94a3b8;
+  --accent-color: #818cf8;
+  --accent-hover: #6366f1;
   --card-bg: #1e1b4b;
   --border-color: #3730a3;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.4), 0 1px 2px rgba(0,0,0,0.3);
+  --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.4), 0 2px 4px -1px rgba(0,0,0,0.3);
 }
 
 /* ================== LOGO Y TEXTO ================== */
@@ -687,7 +741,7 @@ a.btn:hover {
     display: flex;       
     align-items: center; 
     gap: 10px;            
-    color: white;        
+    color: var(--text-primary);
     text-decoration: none; 
 }
 

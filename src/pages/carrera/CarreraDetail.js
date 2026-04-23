@@ -190,11 +190,14 @@ export default function CarreraDetail() {
               exit={{ opacity: 0, scale: 0.8 }}
               transition={{ duration: 0.3 }}
               style={{
-                background: "white",
+                background: "var(--card-bg)",
+                color: "var(--text-primary)",
                 padding: "30px",
                 borderRadius: "12px",
                 width: "400px",
+                maxWidth: "calc(100vw - 40px)",
                 textAlign: "center",
+                border: "1px solid var(--border-color)",
               }}
             >
               <h3>¿Eliminar materia?</h3>
