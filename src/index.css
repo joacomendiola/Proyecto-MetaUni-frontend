@@ -127,14 +127,14 @@ a.btn:hover {
 /* ================== NAVBAR ================== */
 .navbar {
   width: 100%;
-  background: var(--card-bg);
+  background: var(--navbar-bg);
   padding: 12px 40px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   color: var(--text-primary);
   font-weight: 600;
-  border-bottom: 1px solid var(--border-color);
+  border-bottom: 1px solid var(--navbar-border);
   box-shadow: none;
   position: fixed;
   top: 0;
@@ -156,7 +156,7 @@ a.btn:hover {
 
 /*  Links de navegación */
 .nav-links a {
-  color: var(--text-secondary);
+  color: var(--navbar-text);
   text-decoration: none;
   font-weight: 500;
   font-size: 14px;
@@ -167,7 +167,7 @@ a.btn:hover {
 }
 
 .nav-links a:hover { 
-  color: var(--text-primary);
+  color: var(--navbar-text-hover);
   opacity: 1;
 }
 
@@ -177,7 +177,7 @@ a.btn:hover {
   border: none;
   cursor: pointer;
   font-size: 18px;
-  color: var(--text-secondary);
+  color: var(--navbar-text);
   display: flex;
   align-items: center;
   height: 100%;
@@ -185,7 +185,7 @@ a.btn:hover {
 }
 
 .theme-toggle:hover {
-  color: var(--text-primary);
+  color: var(--navbar-text-hover);
 }
 
 /* ================================================================= */
@@ -208,7 +208,7 @@ a.btn:hover {
 /* Contenedor de tarjetas de carrera */
 .careers-container {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
   gap: 20px;
 }
 
@@ -331,17 +331,17 @@ a.btn:hover {
 /* ================== DARK MODE GENERAL ================== */
 .dark-mode { background-color: var(--bg-primary); color: var(--text-primary); }
 .dark-mode .navbar { 
-  background: #312e81; 
-  border-bottom-color: #3730a3;
-  color: #f9fafb;
+  background: var(--navbar-bg); 
+  border-bottom-color: var(--navbar-border);
+  color: var(--navbar-text-hover);
 }
 .dark-mode .navbar .nav-links a,
 .dark-mode .navbar .theme-toggle {
-  color: rgba(255,255,255,0.8);
+  color: var(--navbar-text);
 }
 .dark-mode .navbar .nav-links a:hover,
 .dark-mode .navbar .theme-toggle:hover {
-  color: #ffffff;
+  color: var(--navbar-text-hover);
 }
 
 .dark-mode .card,
@@ -511,7 +511,7 @@ a.btn:hover {
   display: flex;
   align-items: center;
   gap: 8px;
-  color: var(--text-secondary);
+  color: var(--navbar-text);
   font-size: 14px;
   font-weight: 500;
 }
@@ -719,6 +719,10 @@ a.btn:hover {
   --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.07), 0 2px 4px -1px rgba(0,0,0,0.04);
   --radius-sm: 8px;
   --radius-md: 12px;
+  --navbar-bg: var(--card-bg);
+  --navbar-border: var(--border-color);
+  --navbar-text: var(--text-secondary);
+  --navbar-text-hover: var(--text-primary);
 }
 
 .dark-mode {
@@ -732,6 +736,10 @@ a.btn:hover {
   --border-color: #3730a3;
   --shadow-sm: 0 1px 3px rgba(0,0,0,0.4), 0 1px 2px rgba(0,0,0,0.3);
   --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.4), 0 2px 4px -1px rgba(0,0,0,0.3);
+  --navbar-bg: #312e81;
+  --navbar-border: #3730a3;
+  --navbar-text: rgba(255,255,255,0.8);
+  --navbar-text-hover: #ffffff;
 }
 
 /* ================== LOGO Y TEXTO ================== */
